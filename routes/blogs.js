@@ -23,15 +23,15 @@ module.exports = (router) => {
   router.post('/newBlog', (req, res) => {
     // Check if blog title was provided
     if (!req.body.title) {
-      res.json({ success: false, message: 'Blog title is required.' }); // Return error message
+      res.json({ success: false, message: 'Job title is required.' }); // Return error message
     } else {
       // Check if blog body was provided
       if (!req.body.body) {
-        res.json({ success: false, message: 'Blog body is required.' }); // Return error message
+        res.json({ success: false, message: 'Job body is required.' }); // Return error message
       } else {
         // Check if blog's creator was provided
         if (!req.body.createdBy) {
-          res.json({ success: false, message: 'Blog creator is required.' }); // Return error
+          res.json({ success: false, message: 'Job creator is required.' }); // Return error
         } else {
           // Create the blog object for insertion into database
           const blog = new Blog({
@@ -61,7 +61,7 @@ module.exports = (router) => {
                 res.json({ success: false, message: err }); // Return general error message
               }
             } else {
-              res.json({ success: true, message: 'Blog saved!', blog }); // Return success message
+              res.json({ success: true, message: 'Job saved!', blog }); // Return success message
             }
           });
         }

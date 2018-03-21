@@ -1,4 +1,4 @@
-<h1 class="page-header">Blog Feed</h1>
+<h1 class="page-header">Jobs Feed</h1>
 
 <!-- Custom Success/Error Message -->
 <div class="row show-hide-message" *ngIf="message && newPost">
@@ -8,7 +8,7 @@
 </div>
 
 <!-- New Post Button -->
-<button type="button" name="button" class="btn btn-warning" *ngIf="!newPost" (click)="newBlogForm()">New Post</button>
+<button type="button" name="button" class="btn btn-warning" *ngIf="!newPost" (click)="newBlogForm()">New Job</button>
 
 <!-- Reload Button -->
 <button [disabled]="loadingBlogs" type="button" name="button" class="btn btn-default" *ngIf="!newPost" (click)="reloadBlogs()"><span class="glyphicon glyphicon-repeat"></span>&nbsp;&nbsp;Reload</button>
@@ -23,7 +23,7 @@
     <label for="title">Title</label>
     <div [ngClass]="{'has-success': form.controls.title.valid, 'has-error': form.controls.title.dirty && form.controls.title.errors}">
       <!-- Title Input -->
-      <input type="text" name="title" class="form-control" placeholder="*Blog Title" autocomplete="off" formControlName="title" />
+      <input type="text" name="title" class="form-control" placeholder="*Job Title" autocomplete="off" formControlName="title" />
       <!-- Validation -->
       <ul class="help-block">
         <li *ngIf="form.controls.title.dirty && form.controls.title.errors?.required">This field is required.</li>
@@ -78,7 +78,7 @@
     </div>
     <div class="panel-body" *ngFor="let ph of blog.path">
       <img src="{{this.authService.domain}}blogs/uploads/{{ph}}" alt="">
-      <button name="button" class="btn btn-success"><a href="{{this.authService.domain}}blogs/uploads/{{ph}}">Download</a></button>{{ph}}
+      <a class="btn btn-success" href="{{this.authService.domain}}blogs/uploads/{{ph}}" role="button" target="_blank">Download</a>{{ph}}
     </div>
 
     <!-- Panel Footer Start -->
