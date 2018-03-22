@@ -13,6 +13,7 @@ import { Http ,RequestOptions, Headers} from '@angular/http';
 })
 
 export class BlogComponent implements OnInit {
+  
   messageClass;
   message;
   newPost = false;
@@ -21,6 +22,7 @@ export class BlogComponent implements OnInit {
   commentForm;
   processing = false;
   username;
+  role;
   blogPosts;
   newComment = [];
   enabledComments = [];
@@ -68,7 +70,9 @@ export class BlogComponent implements OnInit {
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(200)
-      ])]
+      ])],
+      attachements: []
+      
     })
   }
 
@@ -203,11 +207,14 @@ export class BlogComponent implements OnInit {
 
   // Function to post a new comment
   postComment(id) {
+    this.upload();
     this.disableCommentForm(); // Disable form while saving comment to database
     this.processing = true; // Lock buttons while saving comment to database
     const comment = this.commentForm.get('comment').value; // Get the comment value to pass to service function
+    const attachements=this.upl;
+    console.log(attachements)
     // Function to save the comment to the database
-    this.blogService.postComment(id, comment).subscribe(data => {
+    this.blogService.postComment(id, comment, attachements).subscribe(data => {
       this.getAllBlogs(); // Refresh all blogs to reflect the new comment
       const index = this.newComment.indexOf(id); // Get the index of the blog id to remove from array
       this.newComment.splice(index, 1); // Remove id from the array
@@ -262,7 +269,8 @@ this.upl.push(this.filesToUpload[i]['name'])
   ngOnInit() {
     // Get profile username on page load
     this.authService.getProfile().subscribe(profile => {
-      this.username = profile.user.username; // Used when creating new blog posts and comments
+      this.username = profile.user.username;
+      this.role= profile.user.role; // Used when creating new blog posts and comments
     });
 
     this.getAllBlogs(); // Get all blogs on component load

@@ -77,15 +77,15 @@
       {{ blog.body }}
     </div>
     <div class="panel-body" *ngFor="let ph of blog.path">
-      <img src="{{this.authService.domain}}blogs/uploads/{{ph}}" alt="">
-      <a class="btn btn-success" href="{{this.authService.domain}}blogs/uploads/{{ph}}" role="button" target="_blank">Download</a>{{ph}}
+      <a  href="{{this.authService.domain}}blogs/uploads/{{ph}}" target="_blank"><img src="{{this.authService.domain}}blogs/uploads/{{ph}}" alt="" width="200" height="100"></a>
+      <a  class="btn btn-success" href="{{this.authService.domain}}blogs/uploads/{{ph}}"  role="button" target="_blank">Download</a>{{ph}}
     </div>
 
     <!-- Panel Footer Start -->
     <div class="panel-footer">
       <strong>Posted by: </strong>{{ blog.createdBy }}
       <br />
-      <strong>Date: </strong>{{ blog.createdAt | date:'MMM dd, yyyy' }}
+      <strong>Date: </strong>{{ blog.createdAt | date:'dd MMM yyyy hh:mm a' }}
       <br />
       <div *ngIf="username === blog.createdBy">
         <strong>Likes: </strong>{{ blog.likes }}
@@ -134,6 +134,7 @@
           <form [formGroup]="commentForm">
             <!-- Textarea Input -->
             <textarea name="comment" rows="10" cols="30" class="form-control" formControlName="comment"></textarea>
+            <input type="file" name="attachement" placeholder="upload files" (change)="fileChangeEvent($event)"   multiple  />
             <!-- Validation -->
             <div [ngClass]="{'has-success': !commentForm.controls.comment.errors && commentForm.controls.comment.dirty, 'has-error': commentForm.controls.comment.dirty && commentForm.controls.comment.errors}">
               <ul class="help-block">
@@ -169,13 +170,18 @@
         <!-- Comment -->
         <div *ngIf="enabledComments.indexOf(blog._id) > -1">
           <li *ngFor="let comment of blog.comments" class="list-group-item">
-            <strong>{{ comment.commentator }}:</strong> {{ comment.comment }}
+            <strong>{{ comment.commentator }}:</strong> {{ comment.comment }} <strong>{{comment.createdTime | date:'dd MMM yyyy hh:mm a'}}</strong>
+            <ul><li *ngFor="let attachement of comment.attachements"><a class="btn btn-success" href="{{this.authService.domain}}blogs/uploads/{{attachement}}"  role="button" target="_blank">Download</a>{{attachement}}</li></ul>
           </li>
+          
         </div>
     </ul>
     <!-- Post Comment Box: End -->
-
+    
   </div>
+  <br />
+  <br />
+  
   <!-- Panel Outer Layer -->
 </div>
 <!-- Panel End --> 

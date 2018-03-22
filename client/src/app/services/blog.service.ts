@@ -69,13 +69,16 @@ export class BlogService {
   }
 
   // Function to post a comment on a blog post
-  postComment(id, comment) {
+  postComment(id, comment, attachements) {
     this.createAuthenticationHeaders(); // Create headers
     // Create blogData to pass to backend
     const blogData = {
       id: id,
-      comment: comment
+      comment: comment,
+      attachements: attachements 
+      
     }
+    
     return this.http.post(this.domain + 'blogs/comment', blogData, this.options).map(res => res.json());
 
   }

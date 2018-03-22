@@ -13,11 +13,14 @@ export class ProfileComponent implements OnInit {
 
   username= '';
   email = '';
+  role= '';
   messageClass;
   message;
   processing = false;
   form;
   previousUrl;
+  isReplyFormOpen= false;
+  
 
   constructor(
   private formBuilder: FormBuilder,
@@ -33,7 +36,8 @@ export class ProfileComponent implements OnInit {
     // Once component loads, get user's data to display on profile
     this.authService.getProfile().subscribe(profile => {
       this.username = profile.user.username; // Set username
-      this.email = profile.user.email; // Set e-mail
+      this.email = profile.user.email;
+      this.role = profile.user.role; // Set e-mail
     });
   }
   createForm() {
@@ -63,7 +67,7 @@ enableForm() {
       password: this.form.get('password').value // Password input field
       
     }
-  console.log(CPass)
+  
     // Function to send login data to API
     this.authService.ChangePassword(CPass).subscribe(data => {
       // Check if response was a success or error
@@ -88,6 +92,13 @@ enableForm() {
       }
     });
   }
-
+  
+changePasswordBtn(){
+  if(this.isReplyFormOpen){
+    this.isReplyFormOpen = false
+  }else{
+    this.isReplyFormOpen = true
+  }
+}
 }
 

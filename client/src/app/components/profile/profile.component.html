@@ -2,10 +2,11 @@
 <ul class="list-group">
   <li class="list-group-item">Username: {{ username }}</li>
   <li class="list-group-item">Email: {{ email }}</li>
+  <li class="list-group-item">Role: {{ role }}</li>
 </ul>
+<a class="btn btn-success" (click)="changePasswordBtn()">Change Password</a>
 
 
-<h2 class="page-header">Change Password</h2>
 
 <!-- Custom Success/Error Message -->
 <div class="row show-hide-message">
@@ -14,8 +15,11 @@
   </div>
 </div>
 
-<!-- Login Form -->
-<form [formGroup]="form" (submit)="onChangePasswordSubmit()">
+<!-- ChangePassword Form -->
+
+<div *ngIf="isReplyFormOpen">
+    <h2 class="page-header">Change Password</h2>
+<form [formGroup]="form" (submit)="onChangePasswordSubmit()" >
 
   <!-- Password Field  -->
   <div class="form-group">
@@ -42,4 +46,6 @@
   </div>
   <!-- Submit Button -->
   <input [disabled]="!form.valid || processing" class="btn btn-primary" type="submit" value="Change" />
+  <a class="btn btn-success" (click)="changePasswordBtn()">Cancel</a>
 </form>
+</div>

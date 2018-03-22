@@ -107,7 +107,9 @@ const blogSchema = new Schema({
   dislikedBy: { type: Array },
   comments: [{
     comment: { type: String, validate: commentValidators },
-    commentator: { type: String }
+    commentator: { type: String },
+    attachements:{ type:Array },
+    createdTime: { type: Date, default: Date.now() }
   }]
 });
 

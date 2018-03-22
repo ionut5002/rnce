@@ -423,7 +423,8 @@ module.exports = (router) => {
                     // Add the new comment to the blog post's array
                     blog.comments.push({
                       comment: req.body.comment, // Comment field
-                      commentator: user.username // Person who commented
+                      commentator: user.username,// Person who commented
+                      attachements:req.body.attachements 
                     });
                     // Save blog post
                     blog.save((err) => {
