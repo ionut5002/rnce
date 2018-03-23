@@ -17,18 +17,18 @@
 
 <!-- ChangePassword Form -->
 
-<div *ngIf="isReplyFormOpen">
+<div *ngIf="ChangePassOpen" class="col-md-4">
     <h2 class="page-header">Change Password</h2>
-<form [formGroup]="form" (submit)="onChangePasswordSubmit()" >
+<form [formGroup]="ChangePassform" (submit)="onChangePasswordSubmit()" >
 
   <!-- Password Field  -->
   <div class="form-group">
     <label for="password">Password</label>
-    <div [ngClass]="{'has-error': form.controls.password.errors && form.controls.password.dirty, 'has-success': form.controls.password.valid && form.controls.password.dirty }">
+    <div [ngClass]="{'has-error': ChangePassform.controls.password.errors && ChangePassform.controls.password.dirty, 'has-success': ChangePassform.controls.password.valid && ChangePassform.controls.password.dirty }">
       <input class="form-control" type="password" name="password" formControlName="password" />
       <!-- Validation -->
       <ul class="help-block">
-        <li *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">This field is required.</li>
+        <li *ngIf="ChangePassform.controls.password.errors?.required && ChangePassform.controls.password.dirty">This field is required.</li>
       </ul>
     </div>
   </div>
@@ -36,16 +36,16 @@
   <!-- New Password Field  -->
   <div class="form-group">
     <label for="newPassword"> New Password</label>
-    <div [ngClass]="{'has-error': form.controls.newPassword.errors && form.controls.newPassword.dirty, 'has-success': form.controls.newPassword.valid && form.controls.newPassword.dirty }">
+    <div [ngClass]="{'has-error': ChangePassform.controls.newPassword.errors && ChangePassform.controls.newPassword.dirty, 'has-success': ChangePassform.controls.newPassword.valid && ChangePassform.controls.newPassword.dirty }">
       <input class="form-control" type="password" name="newPassword" formControlName="newPassword" />
       <!-- Validation -->
       <ul class="help-block">
-        <li *ngIf="form.controls.newPassword.errors?.required && form.controls.newPassword.dirty">This field is required.</li>
+        <li *ngIf="ChangePassform.controls.newPassword.errors?.required && ChangePassform.controls.newPassword.dirty">This field is required.</li>
       </ul>
     </div>
   </div>
   <!-- Submit Button -->
-  <input [disabled]="!form.valid || processing" class="btn btn-primary" type="submit" value="Change" />
+  <input [disabled]="!ChangePassform.valid || processing" class="btn btn-primary" type="submit" value="Change" />
   <a class="btn btn-success" (click)="changePasswordBtn()">Cancel</a>
 </form>
 </div>
