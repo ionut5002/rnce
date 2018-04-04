@@ -47,6 +47,7 @@
     </div>
   </div>
   <div class="form-group">
+    <h4>Please attach photos</h4>
   <input type="file" name="photo" placeholder="upload files" (change)="fileChangeEvent($event)"   multiple  />
   <div *ngFor="let names of this.upl">
     <p>{{names}}</p>
@@ -74,11 +75,12 @@
 
     <!-- Panel Body -->
     <div class="panel-body">
+        <h4>Description</h4>
       {{ blog.body }}
     </div>
     <div class="panel-body" *ngFor="let ph of blog.path">
       <a  href="{{this.authService.domain}}blogs/uploads/{{ph}}" target="_blank"><img src="{{this.authService.domain}}blogs/uploads/{{ph}}" alt="" width="200" height="100"></a>
-      <a  class="btn btn-success" href="{{this.authService.domain}}blogs/uploads/{{ph}}"  role="button" target="_blank">Download</a>{{ph}}
+      {{ph}}&nbsp;&nbsp;<a  class="btn btn-sm btn-success" href="{{this.authService.domain}}blogs/uploads/{{ph}}"  role="button" target="_blank">Download</a>
     </div>
 
     <!-- Panel Footer Start -->
@@ -153,29 +155,31 @@
 
         <!-- Show Comments -->
         <li *ngIf="enabledComments.indexOf(blog._id) === -1 && blog.comments.length > 0" class="list-group-item">
-          <span (click)="expand(blog._id)">
+          <button  class="btn btn-sm btn-info" (click)="expand(blog._id)">
             Show comments&nbsp;&nbsp;
             <div class="glyphicon glyphicon-comment"></div>
-          </span>
+          </button>
         </li>
 
         <!-- Hide Comments -->
         <li *ngIf="enabledComments.indexOf(blog._id) > -1" class="list-group-item">
-          <span (click)="collapse(blog._id)">
+          <button class="btn btn-sm btn-info" (click)="collapse(blog._id)">
             Hide Comments&nbsp;&nbsp;
             <div class="glyphicon glyphicon-comment"></div>
-          </span>
+          </button>
         </li>
 
         <!-- Comment -->
         <div *ngIf="enabledComments.indexOf(blog._id) > -1">
           <li *ngFor="let comment of blog.comments" class="list-group-item">
-            <strong>{{ comment.commentator }}:</strong> {{ comment.comment }} <strong>{{comment.createdTime | date:'dd MMM yyyy hh:mm a'}}</strong>
-            <ul><li *ngFor="let attachement of comment.attachements"><a class="btn btn-success" href="{{this.authService.domain}}blogs/uploads/{{attachement}}"  role="button" target="_blank">Download</a>{{attachement}}</li></ul>
+            <strong>{{ comment.commentator }}:</strong>
+            <br /> {{ comment.comment }} 
+            <ul><li *ngFor="let attachement of comment.attachements">{{attachement}}&nbsp;&nbsp;<a class="btn btn-sm btn-success" href="{{this.authService.domain}}blogs/uploads/{{attachement}}"  role="button" target="_blank">Download</a></li></ul>
+            <strong>Created at:{{comment.createdTime | date:'dd MMM yyyy hh:mm a'}}</strong>
           </li>
           
         </div>
-    </ul>
+      </ul>
     <!-- Post Comment Box: End -->
     
   </div>

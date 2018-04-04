@@ -164,6 +164,8 @@ export class BlogComponent implements OnInit {
         this.messageClass = 'alert alert-success'; // Return success class
         this.message = data.message; // Return success message
         this.getAllBlogs();
+        this.getNewNotification();
+
         // Clear form data after two seconds
         setTimeout(() => {
           this.newPost = false; // Hide form
@@ -176,6 +178,22 @@ export class BlogComponent implements OnInit {
     });
   }
 
+  getNewNotification(){
+    const notification = {
+      title: this.form.get('title').value, // Title field
+      createdBy: this.username // CreatedBy field
+    }
+    console.log(notification)
+    this.blogService.newNotification(notification).subscribe(data => {
+      // Check if blog was saved to database or not
+      if (!data.success) {
+        console.log(data.message)
+      } else {
+        console.log(data.message)
+         // Enable the form fields
+        };
+    });
+  }
   // Function to go back to previous page
   goBack() {
     window.location.reload(); // Clear all variable states

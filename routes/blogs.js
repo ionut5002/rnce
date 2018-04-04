@@ -1,5 +1,6 @@
 const User = require('../models/user'); // Import User Model Schema
 const Blog = require('../models/blog'); // Import Blog Model Schema
+const Notification = require('../models/notification');
 const jwt = require('jsonwebtoken'); // Compact, URL-safe means of representing claims to be transferred between two parties.
 const config = require('../config/database'); // Import database configuration
 const multer = require('multer');
@@ -447,6 +448,30 @@ module.exports = (router) => {
   router.post("/uploads", upload.array("uploads[]", 12), function (req, res) {
     console.log('files', req.files);
     res.send(req.files);
+  });
+
+  router.post("/notifications", (req, res) => {
+        if (!req.body.createdBy) {
+          res.json({ success: false, message: 'Job creator is required.' }); // Return error
+        } else {
+          // Create the notification object for insertion into database
+          const notification = new Notification({
+              changesTo:req.body.title,
+              author: req.body.createdBy,
+            
+          });
+          // Save notification into database
+          notification.save((err) => {
+            // Check if error was found
+            if (err) {
+              res.json({ success: false, message: 'Something went wrong.' }); // Return error message
+            } else {
+              res.json({ success: true, message: 'Notification saved' }); // Return success message
+            }
+          });
+        }
+      
+    
   });
 
   return router;

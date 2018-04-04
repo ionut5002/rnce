@@ -82,6 +82,10 @@ export class BlogService {
     return this.http.post(this.domain + 'blogs/comment', blogData, this.options).map(res => res.json());
 
   }
+  newNotification(notification) {
+    this.createAuthenticationHeaders(); // Create headers
+    return this.http.post(this.domain + 'blogs/notifications', notification, this.options).map(res => res.json());
+  }
  
 
 }
