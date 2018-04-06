@@ -3,6 +3,8 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BlogService } from '../../../services/blog.service';
 
+
+
 @Component({
   selector: 'app-edit-blog',
   templateUrl: './edit-blog.component.html',
@@ -21,7 +23,8 @@ export class EditBlogComponent implements OnInit {
     private location: Location,
     private activatedRoute: ActivatedRoute,
     private blogService: BlogService,
-    private router: Router
+    private router: Router,
+   
   ) { }
 
   // Function to Submit Update
@@ -39,9 +42,26 @@ export class EditBlogComponent implements OnInit {
         this.message = data.message; // Set success message
         // After two seconds, navigate back to blog page
         setTimeout(() => {
+          this.getNewNotification();
           this.router.navigate(['/blog']); // Navigate back to route page
         }, 2000);
       }
+    });
+  }
+  getNewNotification(){
+    const notification = {
+      title: this.blog.title, // Title field
+      createdBy: this.blog.createdBy // CreatedBy field
+    }
+    console.log(notification)
+    this.blogService.newNotification(notification).subscribe(data => {
+      // Check if blog was saved to database or not
+      if (!data.success) {
+        console.log(data.message)
+      } else {
+        console.log(data.message)
+         // Enable the form fields
+        };
     });
   }
 

@@ -30,6 +30,8 @@ export class BlogComponent implements OnInit {
   filesToUpload=[];
    upl = [];
    options;
+   Notifications;
+   blogT;
   
 
   constructor(
@@ -128,6 +130,10 @@ export class BlogComponent implements OnInit {
     this.commentForm.reset(); // Reset the comment form each time users starts a new comment
     this.newComment = []; // Clear array so only one post can be commented on at a time
     this.newComment.push(id); // Add the post that is being commented on to the array
+    this.blogService.getSingleBlog(id).subscribe(data =>{
+      this.blogT = data.blog.title;
+      console.log(this.blogT)
+   });
   }
 
   // Function to cancel new post transaction
@@ -163,8 +169,11 @@ export class BlogComponent implements OnInit {
       } else {
         this.messageClass = 'alert alert-success'; // Return success class
         this.message = data.message; // Return success message
-        this.getAllBlogs();
         this.getNewNotification();
+        this.getAllBlogs();
+        this.getAllNotifications();
+
+        
 
         // Clear form data after two seconds
         setTimeout(() => {
@@ -183,16 +192,18 @@ export class BlogComponent implements OnInit {
       title: this.form.get('title').value, // Title field
       createdBy: this.username // CreatedBy field
     }
-    console.log(notification)
     this.blogService.newNotification(notification).subscribe(data => {
       // Check if blog was saved to database or not
-      if (!data.success) {
-        console.log(data.message)
-      } else {
-        console.log(data.message)
-         // Enable the form fields
-        };
+      console.log(data.message)
     });
+  }
+/*   getNewNotificationComment(){
+  
+  } */
+  seenNotification(id){
+    this.blogService.seenNotification(id).subscribe(data =>{
+      this.getAllNotifications();
+    })
   }
   // Function to go back to previous page
   goBack() {
@@ -204,6 +215,12 @@ export class BlogComponent implements OnInit {
     // Function to GET all blogs from database
     this.blogService.getAllBlogs().subscribe(data => {
       this.blogPosts = data.blogs; // Assign array to use in HTML
+    });
+  }
+  getAllNotifications() {
+    // Function to GET all blogs from database
+    this.blogService.getAllNotifications().subscribe(data => {
+      this.Notifications = data.notifications; // Assign array to use in HTML
     });
   }
 
@@ -225,6 +242,21 @@ export class BlogComponent implements OnInit {
 
   // Function to post a new comment
   postComment(id) {
+    
+    const notification = {
+      title: this.blogT, // Title field
+      createdBy: this.username // CreatedBy field
+    }
+    console.log(notification)
+    this.blogService.newNotification(notification).subscribe(data => {
+      // Check if blog was saved to database or not
+      if (!data.success) {
+        console.log(data.message)
+      } else {
+        console.log(data.message)
+         // Enable the form fields
+        };
+    });
     this.upload();
     this.disableCommentForm(); // Disable form while saving comment to database
     this.processing = true; // Lock buttons while saving comment to database
@@ -292,6 +324,7 @@ this.upl.push(this.filesToUpload[i]['name'])
     });
 
     this.getAllBlogs(); // Get all blogs on component load
+    this.getAllNotifications();
     
     
   }

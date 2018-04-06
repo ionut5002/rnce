@@ -13,6 +13,20 @@
 <!-- Reload Button -->
 <button [disabled]="loadingBlogs" type="button" name="button" class="btn btn-default" *ngIf="!newPost" (click)="reloadBlogs()"><span class="glyphicon glyphicon-repeat"></span>&nbsp;&nbsp;Reload</button>
 
+<!-- Notifications Button -->
+<div class="dropdown" *ngIf="!newPost">
+  <!-- Dislike Button -->
+  <button type="button" name="button" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-bell">&nbsp;</span>Notifications</button>
+  <!-- Dropdown Menu Items -->
+  <div class="dropdown-content">
+    <div  *ngFor="let notification of Notifications; let i = index"><div *ngIf="(notification.author !== username) && (!notification.seen.includes(username)) "><tr>
+        <td><strong>{{notification.author}}</strong> made some changes on <strong>{{notification.changesTo}}</strong> at <strong>{{notification.createdAt | date:'dd MMM yyyy hh:mm a'}}</strong>.</td>
+      <td><span class="glyphicon glyphicon-remove " (click)="seenNotification(notification._id)"></span></td>
+      
+    </tr>
+    </div></div>
+  </div>
+  </div>
 <br />
 <br />
 
@@ -189,4 +203,5 @@
   <!-- Panel Outer Layer -->
 </div>
 <!-- Panel End --> 
+
 
