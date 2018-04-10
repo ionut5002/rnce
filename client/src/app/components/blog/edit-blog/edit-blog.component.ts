@@ -53,15 +53,10 @@ export class EditBlogComponent implements OnInit {
       title: this.blog.title, // Title field
       createdBy: this.blog.createdBy // CreatedBy field
     }
-    console.log(notification)
+    
     this.blogService.newNotification(notification).subscribe(data => {
       // Check if blog was saved to database or not
-      if (!data.success) {
-        console.log(data.message)
-      } else {
-        console.log(data.message)
-         // Enable the form fields
-        };
+      
     });
   }
 

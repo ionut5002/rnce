@@ -39,7 +39,19 @@ module.exports = (router) => {
             title: req.body.title, // Title field
             body: req.body.body,// Body field
             path: req.body.path,
-            createdBy: req.body.createdBy // CreatedBy field
+            JobNo: req.body.JobNo,
+            createdBy: req.body.createdBy,
+            Client:req.body.Client,
+            StartDate:req.body.StartDate,
+            SpeedOfRoad:req.body.SpeedOfRoad,
+            RoadWidth:req.body.RoadWidth,
+            CarriagewayType:req.body.CarriagewayType,
+            RoadLevel:req.body.RoadLevel,
+            Volume:req.body.Volume,
+            WorksType:req.body.WorksType,
+            WorksHours:req.body.WorksHours,
+            LocationOnRoad:req.body.LocationOnRoad,
+            TypeOfTrafficCR:req.body.TypeOfTrafficCR
           });
           // Save blog into database
           blog.save((err) => {
@@ -118,12 +130,13 @@ module.exports = (router) => {
                 if (!user) {
                   res.json({ success: false, message: 'Unable to authenticate user' }); // Return error message
                 } else {
+                  res.json({ success: true, blog: blog }); // Return success
                   // Check if the user who requested single blog is the one who created it
-                  if (user.username !== blog.createdBy) {
-                    res.json({ success: false, message: 'You are not authorized to edit this blog.' }); // Return authentication reror
+                 /*  if (user.username !== blog.createdBy) {
+                    res.json({ success: false, message: 'You are not authorized to edit this blog.' }); 
                   } else {
                     res.json({ success: true, blog: blog }); // Return success
-                  }
+                  } */
                 }
               }
             });
@@ -165,8 +178,20 @@ module.exports = (router) => {
                   if (user.username !== blog.createdBy) {
                     res.json({ success: false, message: 'You are not authorized to edit this blog post.' }); // Return error message
                   } else {
-                    blog.title = req.body.title; // Save latest blog title
-                    blog.body = req.body.body; // Save latest body
+                    blog.title = req.body.title;
+                    blog.JobNo = req.body.JobNo; // Save latest blog title
+                    blog.body = req.body.body;
+                    blog.Client = req.body.Client;
+                    blog.StartDate = req.body.StartDate;
+                    blog.SpeedOfRoad = req.body.SpeedOfRoad;
+                    blog.RoadWidth = req.body.RoadWidth;
+                    blog.CarriagewayType = req.body.CarriagewayType;
+                    blog.RoadLevel = req.body.RoadLevel;
+                    blog.Volume = req.body.Volume;
+                    blog.WorksType = req.body.WorksType;
+                    blog.WorksHours = req.body.WorksHours;
+                    blog.LocationOnRoad = req.body.LocationOnRoad;
+                    blog.TypeOfTrafficCR = req.body.TypeOfTrafficCR;
                     blog.save((err) => {
                       if (err) {
                         if (err.errors) {

@@ -15,6 +15,11 @@
     <!-- Title Input -->
     <input [disabled]="processing" type="text" name="title" placeholder="*Blog Title" class="form-control" [(ngModel)]="blog.title" #title="ngModel" />
   </div>
+  <div class="form-group">
+    <label for="JobNo">JobNo</label>
+    <!-- Title Input -->
+    <input [disabled]="processing" type="text" name="JobNo" placeholder="*Blog Title" class="form-control" [(ngModel)]="blog.JobNo" #JobNo="ngModel" />
+  </div>
 
   <!-- Body Field -->
   <div class="form-group">
@@ -28,6 +33,6 @@
   <!-- Go Back Button -->
   <button [disabled]="processing" type="button" name="button" class="btn btn-success" (click)="goBack()">Go Back</button>
   <!-- Save Changes Button -->
-  <button [disabled]="processing || (!title.dirty && !body.dirty)" type="submit" name="save" class="btn btn-info">Save Changes</button>
+  <button [disabled]="processing || (!title.dirty && !body.dirty && !JobNo.dirty)" type="submit" name="save" class="btn btn-info">Save Changes</button>
 
 </form>

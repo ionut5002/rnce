@@ -16,11 +16,11 @@
 <!-- Notifications Button -->
 <div class="dropdown" *ngIf="!newPost">
   <!-- Dislike Button -->
-  <button type="button" name="button" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-bell">&nbsp;</span>Notifications</button>
+  <button type="button" name="button" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-bell">&nbsp;</span>Notifications  <span class="badge">{{this.co}}</span></button>
   <!-- Dropdown Menu Items -->
   <div class="dropdown-content">
-    <div  *ngFor="let notification of Notifications; let i = index"><div *ngIf="(notification.author !== username) && (!notification.seen.includes(username)) "><tr>
-        <td><strong>{{notification.author}}</strong> made some changes on <strong>{{notification.changesTo}}</strong> at <strong>{{notification.createdAt | date:'dd MMM yyyy hh:mm a'}}</strong>.</td>
+    <div  *ngFor="let notification of Notifications"><div *ngIf="(notification.author !== username) && (!notification.seen.includes(username)) "><tr>
+        <td ><strong>{{notification.author}}</strong> made some changes on <strong>{{notification.changesTo}}</strong> at <strong>{{notification.createdAt | date:'dd MMM yyyy hh:mm a'}}</strong>.</td>
       <td><span class="glyphicon glyphicon-remove " (click)="seenNotification(notification._id)"></span></td>
       
     </tr>
@@ -46,9 +46,135 @@
       </ul>
     </div>
   </div>
+  <div class="form-group">
+    <label for="JobNo">JobNo</label>
+    <div [ngClass]="{'has-success': form.controls.JobNo.valid, 'has-error': form.controls.JobNo.dirty && form.controls.JobNo.errors}">
+  <!-- Job Input -->
+  <input type="text" name="JobNo" class="form-control" placeholder="*Job Number" autocomplete="off" formControlName="JobNo" />
+  <!-- Validation -->
+  <ul class="help-block">
+    <li *ngIf="form.controls.JobNo.dirty && form.controls.JobNo.errors?.required">This field is required.</li>
+    
+  </ul>
+</div>
+</div>
+<div class="form-group">
+  <label for="Client">Client</label>
+  <div [ngClass]="{'has-success': form.controls.Client.valid, 'has-error': form.controls.Client.dirty && form.controls.Client.errors}">
+<!-- Client Input -->
+<input type="text" name="Client" class="form-control" placeholder="*Client" autocomplete="off" formControlName="Client" />
+<!-- Validation -->
+<ul class="help-block">
+  <li *ngIf="form.controls.Client.dirty && form.controls.Client.errors?.required">This field is required.</li></ul>
+</div>
+</div>
+<div class="form-group">
+  <label for="StartDate">StartDate</label>
+<!-- StartDate Input -->
+<input type="date" name="StartDate" class="form-control" placeholder="*StartDate"  formControlName="StartDate" />
+</div>
+
+<div class="form-group">
+  <label for="SpeedOfRoad">Speed Of Road</label>
+    <!-- SpeedOfRoad Input -->
+      <select class="form-control" name="SpeedOfRoad" formControlName="SpeedOfRoad">
+        <option >30Km/h</option>
+        <option>40Km/h</option>
+        <option>50Km/h</option>
+        <option selected>60Km/h</option>
+        <option>80Km/h</option>
+        <option>100Km/h</option>
+        <option>120Km/h</option>
+      </select>
+</div>
+
+<div class="form-group">
+  <label for="RoadWidth">Road Width</label>
+  <div [ngClass]="{'has-success': form.controls.RoadWidth.valid, 'has-error': form.controls.RoadWidth.dirty && form.controls.RoadWidth.errors}">
+<!-- Road Width Input -->
+<input type="text" name="RoadWidth" class="form-control" placeholder="*RoadWidth" autocomplete="off" formControlName="RoadWidth" />
+<!-- Validation -->
+<ul class="help-block">
+  <li *ngIf="form.controls.RoadWidth.dirty && form.controls.RoadWidth.errors?.required">This field is required.</li></ul>
+</div>
+</div>
+
+<div class="form-group">
+  <label for="CarriagewayType">Carriageway Type</label>
+    <!-- CarriagewayType Input -->
+      <select class="form-control" name="CarriagewayType" formControlName="CarriagewayType">
+        <option >Single</option>
+        <option>Dual</option>
+      </select>
+</div>
+
+<div class="form-group">
+  <label for="RoadLevel">Road Level</label>
+  <!-- RoadLevel Input -->
+      <select class="form-control" name="RoadLevel" formControlName="RoadLevel">
+        <option >1&amp;2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5&amp;6</option> 
+      </select>
+</div>
+
+<div class="form-group">
+  <label for="Volume">Volume</label>
+  <div [ngClass]="{'has-success': form.controls.Volume.valid, 'has-error': form.controls.Volume.dirty && form.controls.Volume.errors}">
+<!-- Volume Input -->
+<input type="text" name="Volume" class="form-control" placeholder="*Volume" autocomplete="off" formControlName="Volume" />
+<!-- Validation -->
+<ul class="help-block">
+  <li *ngIf="form.controls.Volume.dirty && form.controls.Volume.errors?.required">This field is required.</li></ul>
+</div>
+</div>
+
+<div class="form-group">
+  <label for="WorksType">Works Type</label>
+  <!-- WorksType Input -->
+      <select class="form-control" name="WorksType" formControlName="WorksType">
+        <option selected>A</option>
+        <option>B</option>
+        <option>C</option>
+      </select>
+</div>
+
+<div class="form-group">
+  <label for="WorksHours">Works Hours</label>
+  <!-- WorksType Input -->
+      <select class="form-control" name="WorksHours" formControlName="WorksHours" >
+        <option selected>24Hrs</option>
+        <option>Day</option>
+        <option>Night</option>
+        <option>Short</option>  
+      </select>
+</div>
+
+<div class="form-group">
+  <label for="LocationOnRoad">Location On Road</label>
+  <!-- WorksType Input -->
+      <select class="form-control" name="LocationOnRoad" formControlName="LocationOnRoad">
+        <option selected>Path</option>
+        <option>H/S</option>
+        <option>Bus Lane</option>
+        <option>Lane</option> 
+      </select>
+</div>
+
+<div class="form-group">
+  <label for="TypeOfTrafficCR">Location On Road</label>
+  <!-- WorksType Input -->
+      <select class="form-control" name="TypeOfTrafficCR" formControlName="TypeOfTrafficCR">
+        <option selected>Road Closed</option>
+        <option>Lane Closed</option>
+        <option>Traffic Lights</option>
+        <option>Stop&amp;Go</option>
+        </select>
+</div>
 
   <!-- Body Input -->
-  <div class="form-group">
+  <div class="form-group ">
     <label for="body">Body</label>
     <div [ngClass]="{'has-success': form.controls.body.valid, 'has-error': form.controls.body.dirty && form.controls.body.errors}">
       <!-- Body Input -->
@@ -72,7 +198,7 @@
   <!-- Go Back Button -->
   <button [disabled]="processing" type="button" name="button" (click)="goBack()" class="btn btn-warning">Go Back</button>
   <!-- Submit Button -->
-  <button [disabled]="processing || !form.valid" type="submit" name="button" class="btn btn-success" (click)="upload()">Submit</button>
+  <button [disabled]="processing  || !form.valid" type="submit" name="button" class="btn btn-success" (click)="upload()">Submit</button>
 
 </form>
 <!-- New Blog Form -->
@@ -92,9 +218,13 @@
         <h4>Description</h4>
       {{ blog.body }}
     </div>
+    <div class="panel-body">
+      <h4>Job Number:{{ blog.JobNo }}</h4>
+    
+  </div>
     <div class="panel-body" *ngFor="let ph of blog.path">
       <a  href="{{this.authService.domain}}blogs/uploads/{{ph}}" target="_blank"><img src="{{this.authService.domain}}blogs/uploads/{{ph}}" alt="" width="200" height="100"></a>
-      {{ph}}&nbsp;&nbsp;<a  class="btn btn-sm btn-success" href="{{this.authService.domain}}blogs/uploads/{{ph}}"  role="button" target="_blank">Download</a>
+      {{ph}}&nbsp;&nbsp;<a  class="btn btn-sm btn-success" href="{{this.authService.domain}}blogs/uploads/{{ph}}"  role="button" target="_blank" >Download</a>
     </div>
 
     <!-- Panel Footer Start -->
@@ -103,11 +233,11 @@
       <br />
       <strong>Date: </strong>{{ blog.createdAt | date:'dd MMM yyyy hh:mm a' }}
       <br />
-      <div *ngIf="username === blog.createdBy">
+     <!--  <div *ngIf="username === blog.createdBy">
         <strong>Likes: </strong>{{ blog.likes }}
         <br />
         <strong>Dislikes: </strong>{{ blog.dislikes }}
-      </div>
+      </div> -->
 
       <!-- Edit Button -->
       <a [routerLink]="['/edit-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-info">Edit</button></a>
@@ -115,24 +245,24 @@
       <a [routerLink]="['/delete-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-danger">Delete</button></a>
 
       <!-- Likes Dropdown  -->
-      <div class="dropdown">
+      <!-- <div class="dropdown"> -->
         <!-- Like Button -->
-        <button [disabled]="blog.likedBy.indexOf(username) > -1" type="button" name="button" class="btn btn-sm btn-success" *ngIf="username !== blog.createdBy" (click)="likeBlog(blog._id)"><span class="glyphicon glyphicon-thumbs-up">&nbsp;</span>Likes: {{ blog.likes }}</button>
-        <!-- Dropdown Menu Items -->
-        <div class="dropdown-content">
+        <!-- <button [disabled]="blog.likedBy.indexOf(username) > -1" type="button" name="button" class="btn btn-sm btn-success" *ngIf="username !== blog.createdBy" (click)="likeBlog(blog._id)"><span class="glyphicon glyphicon-thumbs-up">&nbsp;</span>Likes: {{ blog.likes }}</button>
+        --> <!-- Dropdown Menu Items -->
+       <!--  <div class="dropdown-content">
           <a [routerLink]="['/user/', liker]" *ngFor="let liker of blog.likedBy">{{ liker }}</a>
         </div>
-      </div>
+      </div> -->
 
       <!-- Dislikes Dropdown  -->
-      <div class="dropdown">
+      <!-- <div class="dropdown"> -->
         <!-- Dislike Button -->
-        <button [disabled]="blog.dislikedBy.indexOf(username) > -1" type="button" name="button" class="btn btn-sm btn-warning" *ngIf="username !== blog.createdBy" (click)="dislikeBlog(blog._id)"><span class="glyphicon glyphicon-thumbs-down">&nbsp;</span>Dislikes: {{ blog.dislikes }}</button>
-        <!-- Dropdown Menu Items -->
-        <div class="dropdown-content">
+<!--         <button [disabled]="blog.dislikedBy.indexOf(username) > -1" type="button" name="button" class="btn btn-sm btn-warning" *ngIf="username !== blog.createdBy" (click)="dislikeBlog(blog._id)"><span class="glyphicon glyphicon-thumbs-down">&nbsp;</span>Dislikes: {{ blog.dislikes }}</button>
+         --><!-- Dropdown Menu Items -->
+        <!-- <div class="dropdown-content">
           <a [routerLink]="['/user/', disliker]" *ngFor="let disliker of blog.dislikedBy">{{ disliker }}</a>
         </div>
-      </div>
+      </div> -->
 
     </div>
     <!-- Panel Footer End -->

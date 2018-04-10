@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { BlogService } from '../../services/blog.service';
 import {  FileUploader } from 'ng2-file-upload/ng2-file-upload';
 import { Http ,RequestOptions, Headers} from '@angular/http';
+import { forEach } from '@angular/router/src/utils/collection';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class BlogComponent implements OnInit {
    options;
    Notifications;
    blogT;
+   co=0;
   
 
   constructor(
@@ -55,13 +57,30 @@ export class BlogComponent implements OnInit {
         Validators.minLength(5),
         this.alphaNumericValidation
       ])],
+      JobNo: ['', Validators.compose([
+        Validators.required,
+        Validators.maxLength(50),
+        Validators.minLength(5),
+        this.alphaNumericValidation
+      ])],
       // Body field
       body: ['', Validators.compose([
         Validators.required,
         Validators.maxLength(500),
         Validators.minLength(5)
       ])],
-      path: []
+      path: [],
+      Client: [],
+      StartDate : [],
+      SpeedOfRoad: [],
+      RoadWidth: [],
+      CarriagewayType: [],
+      RoadLevel: [],
+      Volume : [],
+      WorksType : [],
+      WorksHours : [],
+      LocationOnRoad : [],
+      TypeOfTrafficCR : [],
     })
   }
 
@@ -91,13 +110,38 @@ export class BlogComponent implements OnInit {
   // Enable new blog form
   enableFormNewBlogForm() {
     this.form.get('title').enable(); // Enable title field
-    this.form.get('body').enable(); // Enable body field
+    this.form.get('body').enable();
+    this.form.get('JobNo').enable();
+    this.form.get('Client').enable();
+    this.form.get('StartDate').enable();
+    this.form.get('SpeedOfRoad').enable();
+    this.form.get('RoadWidth').enable();
+    this.form.get('CarriagewayType').enable();
+    this.form.get('RoadLevel').enable();
+    this.form.get('Volume').enable();
+    this.form.get('WorksType').enable();
+    this.form.get('WorksHours').enable();
+    this.form.get('LocationOnRoad').enable();
+    this.form.get('TypeOfTrafficCR').enable();
+    
   }
 
   // Disable new blog form
   disableFormNewBlogForm() {
     this.form.get('title').disable(); // Disable title field
-    this.form.get('body').disable(); // Disable body field
+    this.form.get('body').disable();
+    this.form.get('JobNo').disable();
+    this.form.get('Client').disable();
+    this.form.get('StartDate').disable();
+    this.form.get('SpeedOfRoad').disable();
+    this.form.get('RoadWidth').disable();
+    this.form.get('CarriagewayType').disable();
+    this.form.get('RoadLevel').disable();
+    this.form.get('Volume').disable();
+    this.form.get('WorksType').disable();
+    this.form.get('WorksHours').disable();
+    this.form.get('LocationOnRoad').disable();
+    this.form.get('TypeOfTrafficCR').disable(); // Disable body field
   }
 
   // Validation for title
@@ -132,7 +176,7 @@ export class BlogComponent implements OnInit {
     this.newComment.push(id); // Add the post that is being commented on to the array
     this.blogService.getSingleBlog(id).subscribe(data =>{
       this.blogT = data.blog.title;
-      console.log(this.blogT)
+      
    });
   }
 
@@ -152,8 +196,20 @@ export class BlogComponent implements OnInit {
 
     // Create blog object from form fields
     const blog = {
-      title: this.form.get('title').value, // Title field
-      body: this.form.get('body').value, // Body field
+      title: this.form.get('title').value,
+      JobNo: this.form.get('JobNo').value, // Title field
+      body: this.form.get('body').value,
+      Client:this.form.get('Client').value,
+      StartDate:this.form.get('StartDate').value,
+      SpeedOfRoad:this.form.get('SpeedOfRoad').value,
+      RoadWidth:this.form.get('RoadWidth').value,
+      CarriagewayType:this.form.get('CarriagewayType').value,
+      RoadLevel:this.form.get('RoadLevel').value,
+      Volume:this.form.get('Volume').value,
+      WorksType:this.form.get('WorksType').value,
+      WorksHours:this.form.get('WorksHours').value,
+      LocationOnRoad:this.form.get('LocationOnRoad').value,
+      TypeOfTrafficCR:this.form.get('TypeOfTrafficCR').value,
       path:this.upl,
       createdBy: this.username // CreatedBy field
     }
@@ -194,7 +250,7 @@ export class BlogComponent implements OnInit {
     }
     this.blogService.newNotification(notification).subscribe(data => {
       // Check if blog was saved to database or not
-      console.log(data.message)
+      
     });
   }
 /*   getNewNotificationComment(){
@@ -220,9 +276,23 @@ export class BlogComponent implements OnInit {
   getAllNotifications() {
     // Function to GET all blogs from database
     this.blogService.getAllNotifications().subscribe(data => {
-      this.Notifications = data.notifications; // Assign array to use in HTML
+      this.Notifications = data.notifications;
+      this.co=0;
+      for(var i=0; i < this.Notifications.length; i++) {
+        if(!this.Notifications[i].seen.includes(this.username) && !this.Notifications[i].author.includes(this.username)){
+          
+            this.co++;
+            
+          
+          
+        }
+      }
+
+      
+    
     });
   }
+  
 
   // Function to like a blog post
   likeBlog(id) {
@@ -247,29 +317,23 @@ export class BlogComponent implements OnInit {
       title: this.blogT, // Title field
       createdBy: this.username // CreatedBy field
     }
-    console.log(notification)
+    
     this.blogService.newNotification(notification).subscribe(data => {
       // Check if blog was saved to database or not
-      if (!data.success) {
-        console.log(data.message)
-      } else {
-        console.log(data.message)
-         // Enable the form fields
-        };
     });
     this.upload();
     this.disableCommentForm(); // Disable form while saving comment to database
     this.processing = true; // Lock buttons while saving comment to database
     const comment = this.commentForm.get('comment').value; // Get the comment value to pass to service function
     const attachements=this.upl;
-    console.log(attachements)
+    
     // Function to save the comment to the database
     this.blogService.postComment(id, comment, attachements).subscribe(data => {
       this.getAllBlogs(); // Refresh all blogs to reflect the new comment
       const index = this.newComment.indexOf(id); // Get the index of the blog id to remove from array
       this.newComment.splice(index, 1); // Remove id from the array
       this.enableCommentForm(); // Re-enable the form
-      this.commentForm.reset(); // Reset the comment form
+      this.commentForm.reset();// Reset the comment form
       this.processing = false; // Unlock buttons on comment form
       if (this.enabledComments.indexOf(id) < 0) this.expand(id); // Expand comments for user on comment submission
     });
@@ -295,6 +359,8 @@ export class BlogComponent implements OnInit {
       })
     });
   }
+  
+  
   upload() {
   
       const formData: any = new FormData();
@@ -315,18 +381,23 @@ this.upl=[];
 this.upl.push(this.filesToUpload[i]['name'])
   }
 }
+reloadAuto(){
+  setInterval(()=>{
+    this.getAllBlogs();
+    this.getAllNotifications(); },10000); 
+  }
+
 
   ngOnInit() {
     // Get profile username on page load
     this.authService.getProfile().subscribe(profile => {
       this.username = profile.user.username;
       this.role= profile.user.role; // Used when creating new blog posts and comments
+      
     });
-
+    this.reloadAuto();
     this.getAllBlogs(); // Get all blogs on component load
     this.getAllNotifications();
-    
-    
   }
 
 
