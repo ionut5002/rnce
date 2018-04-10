@@ -59,9 +59,9 @@ export class BlogComponent implements OnInit {
       ])],
       JobNo: ['', Validators.compose([
         Validators.required,
-        Validators.maxLength(50),
+        Validators.maxLength(5),
         Validators.minLength(5),
-        this.alphaNumericValidation
+        this.NumericValidation2
       ])],
       // Body field
       body: ['', Validators.compose([
@@ -70,13 +70,28 @@ export class BlogComponent implements OnInit {
         Validators.minLength(5)
       ])],
       path: [],
-      Client: [],
+      Client: ['', Validators.compose([
+        Validators.required,
+        Validators.maxLength(25),
+        Validators.minLength(3),
+        this.alphaNumericValidation
+      ])],
       StartDate : [],
       SpeedOfRoad: [],
-      RoadWidth: [],
+      RoadWidth: ['', Validators.compose([
+        Validators.required,
+        Validators.maxLength(4),
+        Validators.minLength(1),
+        this.NumericValidation
+      ])],
       CarriagewayType: [],
       RoadLevel: [],
-      Volume : [],
+      Volume : ['',Validators.compose([
+        Validators.required,
+        Validators.maxLength(4),
+        Validators.minLength(1),
+        this.NumericValidation
+      ])],
       WorksType : [],
       WorksHours : [],
       LocationOnRoad : [],
@@ -154,6 +169,24 @@ export class BlogComponent implements OnInit {
       return { 'alphaNumericValidation': true } // Return error in validation
     }
   }
+  NumericValidation(controls) {
+    const regExp = new RegExp(/^\d*\.?\d*$/); // Regular expression to perform test
+    // Check if test returns false or true
+    if (regExp.test(controls.value)) {
+      return null; // Return valid
+    } else {
+      return { 'NumericValidation': true } // Return error in validation
+    }
+  }
+  NumericValidation2(controls) {
+    const regExp = new RegExp(/^[0-9]+$/); // Regular expression to perform test
+    // Check if test returns false or true
+    if (regExp.test(controls.value)) {
+      return null; // Return valid
+    } else {
+      return { 'NumericValidation2': true } // Return error in validation
+    }
+  }
 
   // Function to display new blog form
   newBlogForm() {
@@ -163,7 +196,8 @@ export class BlogComponent implements OnInit {
   // Reload blogs on current page
   reloadBlogs() {
     this.loadingBlogs = true; // Used to lock button
-    this.getAllBlogs(); // Add any new blogs to the page
+    this.getAllBlogs();
+    this.getAllNotifications(); // Add any new blogs to the page
     setTimeout(() => {
       this.loadingBlogs = false; // Release button lock after four seconds
     }, 4000);
@@ -384,8 +418,10 @@ this.upl.push(this.filesToUpload[i]['name'])
 reloadAuto(){
   setInterval(()=>{
     this.getAllBlogs();
-    this.getAllNotifications(); },10000); 
+    this.getAllNotifications(); },300000); 
   }
+
+
 
 
   ngOnInit() {
