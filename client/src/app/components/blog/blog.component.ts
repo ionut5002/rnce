@@ -34,6 +34,7 @@ export class BlogComponent implements OnInit {
    Notifications;
    blogT;
    co=0;
+   location;
   
 
   constructor(
@@ -421,8 +422,7 @@ reloadAuto(){
     this.getAllNotifications(); },300000); 
   }
 
-
-
+  
 
   ngOnInit() {
     // Get profile username on page load
@@ -434,6 +434,15 @@ reloadAuto(){
     this.reloadAuto();
     this.getAllBlogs(); // Get all blogs on component load
     this.getAllNotifications();
+
+
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(position => {
+        this.location = position.coords;
+        console.log(position.coords.latitude + ', ' +position.coords.longitude);
+        console.log(position.coords.longitude); 
+      });
+   }
   }
 
 
