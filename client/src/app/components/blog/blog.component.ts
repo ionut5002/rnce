@@ -34,8 +34,8 @@ export class BlogComponent implements OnInit {
    Notifications;
    blogT;
    co=0;
+   LocationMap;
    location;
-  
 
   constructor(
     private formBuilder: FormBuilder,
@@ -97,6 +97,15 @@ export class BlogComponent implements OnInit {
       WorksHours : [],
       LocationOnRoad : [],
       TypeOfTrafficCR : [],
+      Address: ['',Validators.compose([
+        Validators.required,
+        Validators.maxLength(200),
+        Validators.minLength(10),
+      ])],
+      LocationMap:[],
+      LicenceRequired:['',Validators.compose([
+        Validators.required
+      ])]
     })
   }
 
@@ -139,6 +148,8 @@ export class BlogComponent implements OnInit {
     this.form.get('WorksHours').enable();
     this.form.get('LocationOnRoad').enable();
     this.form.get('TypeOfTrafficCR').enable();
+    this.form.get('Address').enable();
+    this.form.get('LicenceRequired').enable();
     
   }
 
@@ -157,7 +168,10 @@ export class BlogComponent implements OnInit {
     this.form.get('WorksType').disable();
     this.form.get('WorksHours').disable();
     this.form.get('LocationOnRoad').disable();
-    this.form.get('TypeOfTrafficCR').disable(); // Disable body field
+    this.form.get('TypeOfTrafficCR').disable();
+    this.form.get('Address').disable();
+    this.form.get('LicenceRequired').disable();
+     // Disable body field
   }
 
   // Validation for title
@@ -245,6 +259,9 @@ export class BlogComponent implements OnInit {
       WorksHours:this.form.get('WorksHours').value,
       LocationOnRoad:this.form.get('LocationOnRoad').value,
       TypeOfTrafficCR:this.form.get('TypeOfTrafficCR').value,
+      Address:this.form.get('Address').value,
+      LocationMap:this.LocationMap,
+      LicenceRequired:this.form.get('LicenceRequired').value,
       path:this.upl,
       createdBy: this.username // CreatedBy field
     }
@@ -422,6 +439,17 @@ reloadAuto(){
     this.getAllNotifications(); },300000); 
   }
 
+  getGeolocation(){
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(position => {
+        this.location = position.coords;
+        this.LocationMap = this.location.latitude+', '+this.location.longitude;
+        console.log(this.LocationMap)
+         
+      });
+   }
+  }
+
   
 
   ngOnInit() {
@@ -435,14 +463,6 @@ reloadAuto(){
     this.getAllBlogs(); // Get all blogs on component load
     this.getAllNotifications();
 
-
-    if(navigator.geolocation){
-      navigator.geolocation.getCurrentPosition(position => {
-        this.location = position.coords;
-        console.log(position.coords.latitude + ', ' +position.coords.longitude);
-        console.log(position.coords.longitude); 
-      });
-   }
   }
 
 

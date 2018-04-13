@@ -18,6 +18,8 @@ export class EditBlogComponent implements OnInit {
   processing = false;
   currentUrl;
   loading = true;
+  LocationMap;
+   locations;
 
   constructor(
     private location: Location,
@@ -63,6 +65,16 @@ export class EditBlogComponent implements OnInit {
   // Function to go back to previous page
   goBack() {
     this.location.back();
+  }
+  getGeolocation(){
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(position => {
+        this.locations = position.coords;
+        this.LocationMap = this.locations.latitude+', '+this.locations.longitude;
+        console.log(this.LocationMap)
+         
+      });
+   }
   }
 
   ngOnInit() {

@@ -79,6 +79,22 @@
 <!-- StartDate Input -->
 <input type="date" name="StartDate" class="form-control" placeholder="*StartDate"  formControlName="StartDate" />
 </div></div>
+
+<div class="row">
+  <div class="form-group col-md-9">
+    <label for="Address">Address</label>
+    <div [ngClass]="{'has-success': form.controls.Address.valid, 'has-error': form.controls.Address.dirty && form.controls.Address.errors}">
+  <!-- Client Input -->
+  <input type="text" name="Address" class="form-control" placeholder="*Address" autocomplete="off" formControlName="Address" />
+  <!-- Validation -->
+  <ul class="help-block">
+    <li *ngIf="form.controls.Address.dirty && form.controls.Address.errors?.required">This field is required.</li>
+    <li *ngIf="(form.controls.Address.dirty && form.controls.Address.errors?.minlength) || (form.controls.Address.dirty && form.controls.Address.errors?.maxlength)">Max length: 200, Min length: 10</li>
+  </ul>
+  </div>
+  </div>
+  <div class="form-group col-md-3"><a class="btn btn-success" (click)="getGeolocation()">Get my Location</a><div *ngIf="this.location">Latitude:{{location.latitude}} Longitude:{{location.longitude}}</div></div>
+</div>
 <div class="row">
 <div class="form-group col-md-6">
   <label for="SpeedOfRoad">Speed Of Road</label>
@@ -91,6 +107,15 @@
         <option>80Km/h</option>
         <option>100Km/h</option>
         <option>120Km/h</option>
+      </select>
+</div>
+
+<div class="form-group col-md-6">
+  <label for="LicenceRequired">Licence Required</label>
+    <!-- LicenceRequired Input -->
+      <select class="form-control" name="LicenceRequired" formControlName="LicenceRequired">
+        <option >Yes</option>
+        <option>No</option>
       </select>
 </div></div>
 <div class="row">
@@ -231,17 +256,21 @@
       <div class="col-md-6">
       <ul class="list-unstyled">
         <li><strong>Client: </strong> {{blog.Client}}</li>
+        <li><strong>Address: </strong> {{blog.Address}}</li>
+        <li><strong>Licence Required: </strong> {{blog.LicenceRequired}}</li>
         <li><strong>StartDate:</strong> {{blog.StartDate}}</li>
         <li><strong>SpeedOfRoad:</strong> {{blog.SpeedOfRoad}}</li>
-        <li><strong>RoadWidth:</strong> {{blog.RoadWidth}}m</li>
+        <li><strong>RoadWidth:</strong> {{blog.RoadWidth}} m</li>
         <li><strong>CarriagewayType:</strong> {{blog.CarriagewayType}}</li>
         <li><strong>RoadLevel:</strong> {{blog.RoadLevel}}</li>
-        <li><strong>Volume:</strong> {{blog.Volume}}cars/hour</li>
+        <li><strong>Volume:</strong> {{blog.Volume}} cars/hour</li>
         <li><strong>WorksType:</strong> {{blog.WorksType}}</li>
         <li><strong>WorksHours:</strong> {{blog.WorksHours}}</li>
         <li><strong>LocationOnRoad:</strong> {{blog.LocationOnRoad}}</li>
         <li><strong>Type Of Traffic Control Required:</strong> {{blog.TypeOfTrafficCR}}</li>
         <li><strong>Description:</strong> {{ blog.body }} </li>
+        <li><a *ngIf="blog.LocationMap" class="btn btn-sm btn-info" href="https://www.google.ie/maps/search/{{ blog.LocationMap }}" target="_blank">See on Map by Coordonates</a>
+            <a class="btn btn-sm btn-success" href="https://www.google.ie/maps/search/{{ blog.Address }}" target="_blank">See on Map by Address</a></li>
       </ul>
     </div>
     <div class="col-md-6" *ngFor="let ph of blog.path">

@@ -183,6 +183,7 @@ let VolumeLengthChecker = (Volume) => {
     }
   }
 };
+
 let NumericCheckerVolume = (Volume) => {
   // Check if Volume exists
   if (!Volume) {
@@ -197,11 +198,32 @@ let NumericCheckerVolume = (Volume) => {
 const VolumeValidators =[
   {
     validator: VolumeLengthChecker,
-    message: 'Client must be more than 3 characters but no more than 25.'
+    message: 'Volume must be more than 3 characters but no more than 25.'
   },
   {
     validator: NumericCheckerVolume,
     message: 'Volume must be numeric.'
+  }
+]
+
+let AddressLengthChecker = (Address) => {
+  // Check if Address exists
+  if (!Address) {
+    return false; // Return error
+  } else {
+    // Check length of Address
+    if (Address.length < 10 || Address.length > 200) {
+      return false; // Return error if does not meet length requirement
+    } else {
+      return true; // Return as valid Address
+    }
+  }
+};
+
+const AddressValidators =[
+  {
+    validator: AddressLengthChecker,
+    message: 'Address must be more than 10 characters but no more than 200.'
   }
 ]
 
@@ -254,6 +276,9 @@ const blogSchema = new Schema({
   WorksHours:{type:String,required:true},
   LocationOnRoad:{type:String,required:true},
   TypeOfTrafficCR:{type:String,required:true},
+  Address:{type:String,required:true, validate:AddressValidators},
+  LocationMap:{type:String},
+  LicenceRequired:{type:String, required:true},
   path:{type:Array},
   createdBy: { type: String },
   createdAt: { type: Date, default: Date.now() },

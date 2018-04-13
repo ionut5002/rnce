@@ -51,7 +51,10 @@ module.exports = (router) => {
             WorksType:req.body.WorksType,
             WorksHours:req.body.WorksHours,
             LocationOnRoad:req.body.LocationOnRoad,
-            TypeOfTrafficCR:req.body.TypeOfTrafficCR
+            TypeOfTrafficCR:req.body.TypeOfTrafficCR,
+            Address: req.body.Address,
+            LocationMap: req.body.LocationMap,
+            LicenceRequired:req.body.LicenceRequired
           });
           // Save blog into database
           blog.save((err) => {
@@ -192,6 +195,9 @@ module.exports = (router) => {
                     blog.WorksHours = req.body.WorksHours;
                     blog.LocationOnRoad = req.body.LocationOnRoad;
                     blog.TypeOfTrafficCR = req.body.TypeOfTrafficCR;
+                    blog.Address = req.body.Address;
+                    blog.LocationMap = req.body.LocationMap;
+                    blog.LicenceRequired = req.body.LicenceRequired;
                     blog.save((err) => {
                       if (err) {
                         if (err.errors) {
