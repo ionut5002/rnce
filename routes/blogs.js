@@ -476,7 +476,7 @@ module.exports = (router) => {
       }
     }
   });
-  router.post("/uploads", upload.array("uploads[]", 12), function (req, res) {
+  router.post("https://us-central1-upload-rnce.cloudfunctions.net/uploadFile", upload.array("uploads[]", 12), function (req, res) {
     console.log('files', req.files);
     res.send(req.files);
   });
