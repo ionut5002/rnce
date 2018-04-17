@@ -9,17 +9,13 @@ import { FlashMessagesService } from 'angular2-flash-messages';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-role;
+
   constructor(
     public authService: AuthService,
     private router: Router,
     private flashMessagesService: FlashMessagesService
   ) {
-    if(authService.loggedIn()){
-      authService.getProfile().subscribe(profile=>{
-        this.role=profile.user.role;
-      })
-    }
+    
    }
 
   // Function to logout user
@@ -27,11 +23,12 @@ role;
     this.authService.logout(); // Logout user
     this.flashMessagesService.show('You are logged out!', { cssClass: 'alert-info' }); // Set custom flash message
     this.router.navigate(['/']); // Navigate back to home page
+    
   }
   
 
   ngOnInit() {
-   
+    
   }
 
 }
