@@ -13,13 +13,28 @@
 <!-- Reload Button -->
 <button [disabled]="loadingBlogs" type="button" name="button" class="btn btn-default" *ngIf="!newPost" (click)="reloadBlogs()"><span class="glyphicon glyphicon-repeat"></span>&nbsp;&nbsp;Reload</button>
 
+<!-- Notifications Button -->
+<div class="dropdown" *ngIf="!newPost">
+  <!-- Dislike Button -->
+  <button type="button" name="button" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-bell">&nbsp;</span>Notifications  <span class="badge">{{this.co}}</span></button>
+  <!-- Dropdown Menu Items -->
+  <div class="dropdown-content">
+    <div  *ngFor="let notification of Notifications"><div *ngIf="(notification.author !== username) && (!notification.seen.includes(username)) "><tr>
+        <td ><strong>{{notification.author}}</strong> made some changes on <strong>{{notification.changesTo}}</strong> at <strong>{{notification.createdAt | date:'dd MMM yyyy hh:mm a'}}</strong>.</td>
+      <td><span class="glyphicon glyphicon-remove " (click)="seenNotification(notification._id)"></span></td>
+      
+    </tr>
+    </div></div>
+  </div>
+  </div>
 <br />
 <br />
 
 <!-- New Blog Forms -->
 <form [formGroup]="form" name="blogForm" (submit)="onBlogSubmit() " *ngIf="newPost">
   <!-- Title Input -->
-  <div class="form-group">
+  <div class="row">
+  <div class="form-group col-md-9">
     <label for="title">Title</label>
     <div [ngClass]="{'has-success': form.controls.title.valid, 'has-error': form.controls.title.dirty && form.controls.title.errors}">
       <!-- Title Input -->
@@ -32,13 +47,175 @@
       </ul>
     </div>
   </div>
+  <div class="form-group col-md-3">
+    <label for="JobNo">JobNo</label>
+    <div [ngClass]="{'has-success': form.controls.JobNo.valid, 'has-error': form.controls.JobNo.dirty && form.controls.JobNo.errors}">
+  <!-- Job Input -->
+  <input type="text" name="JobNo" class="form-control" placeholder="*Job Number" autocomplete="off" formControlName="JobNo" />
+  <!-- Validation -->
+  <ul class="help-block">
+    <li *ngIf="form.controls.JobNo.dirty && form.controls.JobNo.errors?.required">This field is required.</li>
+    <li *ngIf="(form.controls.JobNo.dirty && form.controls.JobNo.errors?.minlength) || (form.controls.JobNo.dirty && form.controls.JobNo.errors?.maxlength)">Only 5 Digits</li>
+    <li *ngIf="form.controls.JobNo.dirty && form.controls.JobNo.errors?.NumericValidation2">Must be a number</li>
+  </ul>
+</div>
+</div></div>
+<div class="row">
+<div class="form-group col-md-9">
+  <label for="Client">Client</label>
+  <div [ngClass]="{'has-success': form.controls.Client.valid, 'has-error': form.controls.Client.dirty && form.controls.Client.errors}">
+<!-- Client Input -->
+<input type="text" name="Client" class="form-control" placeholder="*Client" autocomplete="off" formControlName="Client" />
+<!-- Validation -->
+<ul class="help-block">
+  <li *ngIf="form.controls.Client.dirty && form.controls.Client.errors?.required">This field is required.</li>
+  <li *ngIf="(form.controls.Client.dirty && form.controls.Client.errors?.minlength) || (form.controls.Client.dirty && form.controls.Client.errors?.maxlength)">Max length: 25, Min length: 3</li>
+  <li *ngIf="form.controls.Client.dirty && form.controls.Client.errors?.alphaNumericValidation">Must be a letter or number</li>
+</ul>
+</div>
+</div>
+<div class="form-group col-md-3">
+  <label for="StartDate">StartDate</label>
+<!-- StartDate Input -->
+<input type="date" name="StartDate" class="form-control" placeholder="*StartDate"  formControlName="StartDate" />
+</div></div>
+
+<div class="row">
+  <div class="form-group col-md-9">
+    <label for="Address">Address</label>
+    <div [ngClass]="{'has-success': form.controls.Address.valid, 'has-error': form.controls.Address.dirty && form.controls.Address.errors}">
+  <!-- Client Input -->
+  <input type="text" name="Address" class="form-control" placeholder="*Address" autocomplete="off" formControlName="Address" />
+  <!-- Validation -->
+  <ul class="help-block">
+    <li *ngIf="form.controls.Address.dirty && form.controls.Address.errors?.required">This field is required.</li>
+    <li *ngIf="(form.controls.Address.dirty && form.controls.Address.errors?.minlength) || (form.controls.Address.dirty && form.controls.Address.errors?.maxlength)">Max length: 200, Min length: 10</li>
+  </ul>
+  </div>
+  </div>
+  <div class="form-group col-md-3"><a class="btn btn-success" (click)="getGeolocation()">Get my Location</a><div *ngIf="this.location">Latitude:{{location.latitude}} Longitude:{{location.longitude}}</div></div>
+</div>
+<div class="row">
+<div class="form-group col-md-6">
+  <label for="SpeedOfRoad">Speed Of Road</label>
+    <!-- SpeedOfRoad Input -->
+      <select class="form-control" name="SpeedOfRoad" formControlName="SpeedOfRoad">
+        <option >30Km/h</option>
+        <option>40Km/h</option>
+        <option>50Km/h</option>
+        <option class="selected">60Km/h</option>
+        <option>80Km/h</option>
+        <option>100Km/h</option>
+        <option>120Km/h</option>
+      </select>
+</div>
+
+<div class="form-group col-md-6">
+  <label for="LicenceRequired">Licence Required</label>
+    <!-- LicenceRequired Input -->
+      <select class="form-control" name="LicenceRequired" formControlName="LicenceRequired">
+        <option >Yes</option>
+        <option>No</option>
+      </select>
+</div></div>
+<div class="row">
+<div class="form-group col-md-6">
+  <label for="RoadWidth">Road Width</label>
+  <div [ngClass]="{'has-success': form.controls.RoadWidth.valid, 'has-error': form.controls.RoadWidth.dirty && form.controls.RoadWidth.errors}">
+<!-- Road Width Input -->
+<input type="text" name="RoadWidth" class="form-control" placeholder="*RoadWidth" autocomplete="off" formControlName="RoadWidth" />
+<!-- Validation -->
+<ul class="help-block">
+  <li *ngIf="form.controls.RoadWidth.dirty && form.controls.RoadWidth.errors?.required">This field is required.</li>
+  <li *ngIf="(form.controls.RoadWidth.dirty && form.controls.RoadWidth.errors?.minlength) || (form.controls.RoadWidth.dirty && form.controls.RoadWidth.errors?.maxlength)">Max length: 4, Min length: 1</li>
+  <li *ngIf="form.controls.RoadWidth.dirty && form.controls.RoadWidth.errors?.NumericValidation">Must be a number</li>
+</ul>
+</div>
+</div>
+
+<div class="form-group col-md-6">
+  <label for="CarriagewayType">Carriageway Type</label>
+    <!-- CarriagewayType Input -->
+      <select class="form-control" name="CarriagewayType" formControlName="CarriagewayType">
+        <option >Single</option>
+        <option>Dual</option>
+      </select>
+</div></div>
+<div class="row">
+<div class="form-group col-md-6">
+  <label for="RoadLevel">Road Level</label>
+  <!-- RoadLevel Input -->
+      <select class="form-control" name="RoadLevel" formControlName="RoadLevel">
+        <option >1&amp;2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5&amp;6</option> 
+      </select>
+</div>
+
+<div class="form-group col-md-6">
+  <label for="Volume">Volume</label>
+  <div [ngClass]="{'has-success': form.controls.Volume.valid, 'has-error': form.controls.Volume.dirty && form.controls.Volume.errors}">
+<!-- Volume Input -->
+<input type="text" name="Volume" class="form-control" placeholder="*Volume" autocomplete="off" formControlName="Volume" />
+<!-- Validation -->
+<ul class="help-block">
+  <li *ngIf="form.controls.Volume.dirty && form.controls.Volume.errors?.required">This field is required.</li>
+  <li *ngIf="(form.controls.Volume.dirty && form.controls.Volume.errors?.minlength) || (form.controls.Volume.dirty && form.controls.Volume.errors?.maxlength)">Max length: 4, Min length: 1</li>
+  <li *ngIf="form.controls.Volume.dirty && form.controls.Volume.errors?.NumericValidation">Must be a number</li>
+</ul>
+</div>
+</div></div>
+<div class="row">
+<div class="form-group col-md-6">
+  <label for="WorksType">Works Type</label>
+  <!-- WorksType Input -->
+      <select class="form-control" name="WorksType" formControlName="WorksType">
+        <option selected>A</option>
+        <option>B</option>
+        <option>C</option>
+      </select>
+</div>
+
+<div class="form-group col-md-6">
+  <label for="WorksHours">Works Hours</label>
+  <!-- WorksType Input -->
+      <select class="form-control" name="WorksHours" formControlName="WorksHours" >
+        <option selected>24Hrs</option>
+        <option>Day</option>
+        <option>Night</option>
+        <option>Short</option>  
+      </select>
+</div></div>
+<div class="row">
+<div class="form-group col-md-6">
+  <label for="LocationOnRoad">Location On Road</label>
+  <!-- WorksType Input -->
+      <select class="form-control" name="LocationOnRoad" formControlName="LocationOnRoad">
+        <option selected>Path</option>
+        <option>H/S</option>
+        <option>Bus Lane</option>
+        <option>Lane</option> 
+      </select>
+</div>
+
+<div class="form-group col-md-6">
+  <label for="TypeOfTrafficCR">Type Of Traffic Control Required</label>
+  <!-- TypeOfTrafficCR Input -->
+      <select class="form-control" name="TypeOfTrafficCR" formControlName="TypeOfTrafficCR">
+        <option selected>Road Closed</option>
+        <option>Lane Closed</option>
+        <option>Traffic Lights</option>
+        <option>Stop&amp;Go</option>
+        </select>
+</div></div>
 
   <!-- Body Input -->
-  <div class="form-group">
-    <label for="body">Body</label>
+  <div class="form-group ">
+    <label for="body">Description</label>
     <div [ngClass]="{'has-success': form.controls.body.valid, 'has-error': form.controls.body.dirty && form.controls.body.errors}">
       <!-- Body Input -->
-      <textarea name="body" rows="8" cols="80" placeholder="*Body" class="form-control" formControlName="body"></textarea>
+      <textarea name="body" rows="8" cols="80" placeholder="*Description" class="form-control" formControlName="body"></textarea>
       <!-- Validation -->
       <ul class="help-block">
         <li *ngIf="form.controls.body.dirty && form.controls.body.errors?.required">This field is required.</li>
@@ -58,7 +235,7 @@
   <!-- Go Back Button -->
   <button [disabled]="processing" type="button" name="button" (click)="goBack()" class="btn btn-warning">Go Back</button>
   <!-- Submit Button -->
-  <button [disabled]="processing || !form.valid" type="submit" name="button" class="btn btn-success" (click)="upload()">Submit</button>
+  <button [disabled]="processing  || !form.valid" type="submit" name="button" class="btn btn-success" (click)="upload()">Submit</button>
 
 </form>
 <!-- New Blog Form -->
@@ -70,18 +247,36 @@
 
     <!-- Panel Title -->
     <div class="panel-heading">
-      <h3 class="panel-title">{{ blog.title }}</h3>
+      <h3 class="panel-title">{{ blog.title }} {{ blog.JobNo }}</h3>
     </div>
 
     <!-- Panel Body -->
+    
     <div class="panel-body">
-        <h4>Description</h4>
-      {{ blog.body }}
+      <div class="col-md-6">
+      <ul class="list-unstyled">
+        <li><strong>Client: </strong> {{blog.Client}}</li>
+        <li><strong>Address: </strong> {{blog.Address}}</li>
+        <li><strong>Licence Required: </strong> {{blog.LicenceRequired}}</li>
+        <li><strong>StartDate:</strong> {{blog.StartDate}}</li>
+        <li><strong>SpeedOfRoad:</strong> {{blog.SpeedOfRoad}}</li>
+        <li><strong>RoadWidth:</strong> {{blog.RoadWidth}} m</li>
+        <li><strong>CarriagewayType:</strong> {{blog.CarriagewayType}}</li>
+        <li><strong>RoadLevel:</strong> {{blog.RoadLevel}}</li>
+        <li><strong>Volume:</strong> {{blog.Volume}} cars/hour</li>
+        <li><strong>WorksType:</strong> {{blog.WorksType}}</li>
+        <li><strong>WorksHours:</strong> {{blog.WorksHours}}</li>
+        <li><strong>LocationOnRoad:</strong> {{blog.LocationOnRoad}}</li>
+        <li><strong>Type Of Traffic Control Required:</strong> {{blog.TypeOfTrafficCR}}</li>
+        <li><strong>Description:</strong> {{ blog.body }} </li>
+        <li><a *ngIf="blog.LocationMap" class="btn btn-sm btn-info" href="https://www.google.ie/maps/search/{{ blog.LocationMap }}" target="_blank">See on Map by Coordonates</a>
+            <a class="btn btn-sm btn-success" href="https://www.google.ie/maps/search/{{ blog.Address }}" target="_blank">See on Map by Address</a></li>
+      </ul>
     </div>
-    <div class="panel-body" *ngFor="let ph of blog.path">
+    <div class="col-md-6" *ngFor="let ph of blog.path">
       <a  href="{{this.authService.domain}}blogs/uploads/{{ph}}" target="_blank"><img src="{{this.authService.domain}}blogs/uploads/{{ph}}" alt="" width="200" height="100"></a>
-      {{ph}}&nbsp;&nbsp;<a  class="btn btn-sm btn-success" href="{{this.authService.domain}}blogs/uploads/{{ph}}"  role="button" target="_blank">Download</a>
-    </div>
+      {{ph}}&nbsp;&nbsp;<a  class="btn btn-sm btn-success" href="{{this.authService.domain}}blogs/uploads/{{ph}}"  role="button" target="_blank" >Download</a><br/><br/>
+    </div></div>
 
     <!-- Panel Footer Start -->
     <div class="panel-footer">
@@ -89,11 +284,11 @@
       <br />
       <strong>Date: </strong>{{ blog.createdAt | date:'dd MMM yyyy hh:mm a' }}
       <br />
-      <div *ngIf="username === blog.createdBy">
+     <!--  <div *ngIf="username === blog.createdBy">
         <strong>Likes: </strong>{{ blog.likes }}
         <br />
         <strong>Dislikes: </strong>{{ blog.dislikes }}
-      </div>
+      </div> -->
 
       <!-- Edit Button -->
       <a [routerLink]="['/edit-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-info">Edit</button></a>
@@ -101,24 +296,24 @@
       <a [routerLink]="['/delete-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-danger">Delete</button></a>
 
       <!-- Likes Dropdown  -->
-      <div class="dropdown">
+      <!-- <div class="dropdown"> -->
         <!-- Like Button -->
-        <button [disabled]="blog.likedBy.indexOf(username) > -1" type="button" name="button" class="btn btn-sm btn-success" *ngIf="username !== blog.createdBy" (click)="likeBlog(blog._id)"><span class="glyphicon glyphicon-thumbs-up">&nbsp;</span>Likes: {{ blog.likes }}</button>
-        <!-- Dropdown Menu Items -->
-        <div class="dropdown-content">
+        <!-- <button [disabled]="blog.likedBy.indexOf(username) > -1" type="button" name="button" class="btn btn-sm btn-success" *ngIf="username !== blog.createdBy" (click)="likeBlog(blog._id)"><span class="glyphicon glyphicon-thumbs-up">&nbsp;</span>Likes: {{ blog.likes }}</button>
+        --> <!-- Dropdown Menu Items -->
+       <!--  <div class="dropdown-content">
           <a [routerLink]="['/user/', liker]" *ngFor="let liker of blog.likedBy">{{ liker }}</a>
         </div>
-      </div>
+      </div> -->
 
       <!-- Dislikes Dropdown  -->
-      <div class="dropdown">
+      <!-- <div class="dropdown"> -->
         <!-- Dislike Button -->
-        <button [disabled]="blog.dislikedBy.indexOf(username) > -1" type="button" name="button" class="btn btn-sm btn-warning" *ngIf="username !== blog.createdBy" (click)="dislikeBlog(blog._id)"><span class="glyphicon glyphicon-thumbs-down">&nbsp;</span>Dislikes: {{ blog.dislikes }}</button>
-        <!-- Dropdown Menu Items -->
-        <div class="dropdown-content">
+<!--         <button [disabled]="blog.dislikedBy.indexOf(username) > -1" type="button" name="button" class="btn btn-sm btn-warning" *ngIf="username !== blog.createdBy" (click)="dislikeBlog(blog._id)"><span class="glyphicon glyphicon-thumbs-down">&nbsp;</span>Dislikes: {{ blog.dislikes }}</button>
+         --><!-- Dropdown Menu Items -->
+        <!-- <div class="dropdown-content">
           <a [routerLink]="['/user/', disliker]" *ngFor="let disliker of blog.dislikedBy">{{ disliker }}</a>
         </div>
-      </div>
+      </div> -->
 
     </div>
     <!-- Panel Footer End -->

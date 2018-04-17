@@ -15,8 +15,8 @@
         <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a routerLink="/">Home</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a routerLink="/dashboard">Dashboard</a></li>
-        <li><a *ngIf="role ==='Admin' && authService.loggedIn()" routerLink="/register">Add User</a></li>
+        <!-- <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a routerLink="/dashboard">Dashboard</a></li> -->
+        <!-- <li><a *ngIf="role==='Admin'&& authService.loggedIn()" routerLink="/register">Add User</a></li> -->
         <li><a *ngIf="authService.loggedIn()" routerLink="/profile">Profile</a></li>
         <li><a *ngIf="authService.loggedIn()" routerLink="/blog">Jobs</a></li>
         <li><a *ngIf="!authService.loggedIn()" routerLink="/login">Login</a></li>

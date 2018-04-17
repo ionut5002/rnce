@@ -39,7 +39,22 @@ module.exports = (router) => {
             title: req.body.title, // Title field
             body: req.body.body,// Body field
             path: req.body.path,
-            createdBy: req.body.createdBy // CreatedBy field
+            JobNo: req.body.JobNo,
+            createdBy: req.body.createdBy,
+            Client:req.body.Client,
+            StartDate:req.body.StartDate,
+            SpeedOfRoad:req.body.SpeedOfRoad,
+            RoadWidth:req.body.RoadWidth,
+            CarriagewayType:req.body.CarriagewayType,
+            RoadLevel:req.body.RoadLevel,
+            Volume:req.body.Volume,
+            WorksType:req.body.WorksType,
+            WorksHours:req.body.WorksHours,
+            LocationOnRoad:req.body.LocationOnRoad,
+            TypeOfTrafficCR:req.body.TypeOfTrafficCR,
+            Address: req.body.Address,
+            LocationMap: req.body.LocationMap,
+            LicenceRequired:req.body.LicenceRequired
           });
           // Save blog into database
           blog.save((err) => {
@@ -118,12 +133,13 @@ module.exports = (router) => {
                 if (!user) {
                   res.json({ success: false, message: 'Unable to authenticate user' }); // Return error message
                 } else {
+                  res.json({ success: true, blog: blog }); // Return success
                   // Check if the user who requested single blog is the one who created it
-                  if (user.username !== blog.createdBy) {
-                    res.json({ success: false, message: 'You are not authorized to edit this blog.' }); // Return authentication reror
+                 /*  if (user.username !== blog.createdBy) {
+                    res.json({ success: false, message: 'You are not authorized to edit this blog.' }); 
                   } else {
                     res.json({ success: true, blog: blog }); // Return success
-                  }
+                  } */
                 }
               }
             });
@@ -165,8 +181,23 @@ module.exports = (router) => {
                   if (user.username !== blog.createdBy) {
                     res.json({ success: false, message: 'You are not authorized to edit this blog post.' }); // Return error message
                   } else {
-                    blog.title = req.body.title; // Save latest blog title
-                    blog.body = req.body.body; // Save latest body
+                    blog.title = req.body.title;
+                    blog.JobNo = req.body.JobNo; // Save latest blog title
+                    blog.body = req.body.body;
+                    blog.Client = req.body.Client;
+                    blog.StartDate = req.body.StartDate;
+                    blog.SpeedOfRoad = req.body.SpeedOfRoad;
+                    blog.RoadWidth = req.body.RoadWidth;
+                    blog.CarriagewayType = req.body.CarriagewayType;
+                    blog.RoadLevel = req.body.RoadLevel;
+                    blog.Volume = req.body.Volume;
+                    blog.WorksType = req.body.WorksType;
+                    blog.WorksHours = req.body.WorksHours;
+                    blog.LocationOnRoad = req.body.LocationOnRoad;
+                    blog.TypeOfTrafficCR = req.body.TypeOfTrafficCR;
+                    blog.Address = req.body.Address;
+                    blog.LocationMap = req.body.LocationMap;
+                    blog.LicenceRequired = req.body.LicenceRequired;
                     blog.save((err) => {
                       if (err) {
                         if (err.errors) {
@@ -472,6 +503,68 @@ module.exports = (router) => {
         }
       
     
+  });
+
+  router.put("/seen", (req, res)=>{
+    
+    // Check if id was passed provided in request body
+    if (!req.body.id) {
+      res.json({ success: false, message: 'No id was provided.' }); // Return error message
+    } else {
+      // Search the database with id
+      Notification.findOne({ _id: req.body.id }, (err, notification) => {
+        // Check if error was encountered
+        if (err) {
+          res.json({ success: false, message: 'Invalid blog id' }); // Return error message
+        } else {
+          // Check if id matched the id of a blog post in the database
+          if (!notification) {
+            res.json({ success: false, message: 'That blog was not found.' }); // Return error message
+          } else {
+            // Get data from user that is signed in
+            User.findOne({ _id: req.decoded.userId }, (err, user) => {
+              // Check if error was found
+              if (err) {
+                res.json({ success: false, message: 'Something went wrong.' }); // Return error message
+              } else {
+                // Check if id of user in session was found in the database
+                if (!user) {
+                  res.json({ success: false, message: 'Could not authenticate user.' }); // Return error message
+                } else {
+                  
+                        notification.seen.push(user.username); // Add liker's username into array of likedBy
+                        // Save blog post
+                        notification.save((err) => {
+                          if (err) {
+                            res.json({ success: false, message: 'Something went wrong.' }); // Return error message
+                          } else {
+                            res.json({ success: true, message: 'notification seen!' }); // Return success message
+                          }
+                        });
+                }
+              }
+            });
+          }
+        }
+      });
+    }
+  });
+
+  router.get('/allNotifications', (req, res) => {
+    // Search database for all blog posts
+    Notification.find({}, (err, notificatons) => {
+      // Check if error was found or not
+      if (err) {
+        res.json({ success: false, message: err }); // Return error message
+      } else {
+        // Check if blogs were found in database
+        if (!notificatons) {
+          res.json({ success: false, message: 'No blogs found.' }); // Return error of no blogs found
+        } else {
+          res.json({ success: true, notifications: notificatons }); // Return success and blogs array
+        }
+      }
+    }).sort({ '_id': -1 }); // Sort blogs from newest to oldest
   });
 
   return router;

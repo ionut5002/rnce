@@ -37,6 +37,10 @@ export class BlogService {
     this.createAuthenticationHeaders(); // Create headers
     return this.http.get(this.domain + 'blogs/allBlogs', this.options).map(res => res.json());
   }
+  getAllNotifications() {
+    this.createAuthenticationHeaders(); // Create headers
+    return this.http.get(this.domain + 'blogs/allNotifications', this.options).map(res => res.json());
+  }
 
   // Function to get the blog using the id
   getSingleBlog(id) {
@@ -85,6 +89,11 @@ export class BlogService {
   newNotification(notification) {
     this.createAuthenticationHeaders(); // Create headers
     return this.http.post(this.domain + 'blogs/notifications', notification, this.options).map(res => res.json());
+  }
+
+  seenNotification(id){
+    const notseen ={ id: id};
+    return this.http.put(this.domain + 'blogs/seen', notseen, this.options).map(res=> res.json());
   }
  
 
