@@ -274,8 +274,8 @@
       </ul>
     </div>
     <div class="col-md-6" *ngFor="let ph of blog.path">
-      <a  href="{{this.authService.domain}}blogs/uploads/{{ph}}" target="_blank"><img src="{{this.authService.domain}}blogs/uploads/{{ph}}" alt="" width="200" height="100"></a>
-      {{ph}}&nbsp;&nbsp;<a  class="btn btn-sm btn-success" href="{{this.authService.domain}}blogs/uploads/{{ph}}"  role="button" target="_blank" >Download</a><br/><br/>
+      <a  href="https://firebasestorage.googleapis.com/v0/b/upload-rnce.appspot.com/o/{{ph}}?alt=media" target="_blank"><img src="https://firebasestorage.googleapis.com/v0/b/upload-rnce.appspot.com/o/{{ph}}?alt=media" alt="" width="200" height="100"></a>
+      {{ph}}&nbsp;&nbsp;<a  class="btn btn-sm btn-success" href="https://firebasestorage.googleapis.com/v0/b/upload-rnce.appspot.com/o/{{ph}}?alt=media"  role="button" target="_blank" >Download</a><br/><br/>
     </div></div>
 
     <!-- Panel Footer Start -->
@@ -369,7 +369,7 @@
           <li *ngFor="let comment of blog.comments" class="list-group-item">
             <strong>{{ comment.commentator }}:</strong>
             <br /> {{ comment.comment }} 
-            <ul><li *ngFor="let attachement of comment.attachements">{{attachement}}&nbsp;&nbsp;<a class="btn btn-sm btn-success" href="{{this.authService.domain}}blogs/uploads/{{attachement}}"  role="button" target="_blank">Download</a></li></ul>
+            <ul><li *ngFor="let attachement of comment.attachements">{{attachement}}&nbsp;&nbsp;<a class="btn btn-sm btn-success" href="https://firebasestorage.googleapis.com/v0/b/upload-rnce.appspot.com/o/{{attachement}}?alt=media"  role="button" target="_blank">Download</a></li></ul>
             <strong>Created at:{{comment.createdTime | date:'dd MMM yyyy hh:mm a'}}</strong>
           </li>
           

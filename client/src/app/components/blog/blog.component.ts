@@ -420,10 +420,11 @@ export class BlogComponent implements OnInit {
   
       for(let i =0; i < files.length; i++){
           formData.append("uploads[]", files[i], files[i]['name']);
+          this.createAuthenticationHeaders();
+         this.http.post("https://us-central1-upload-rnce.cloudfunctions.net/uploadFile", formData,  this.options )
+          .map(files => files).subscribe()
       }
-      this.createAuthenticationHeaders();
-      return this.http.post(this.authService.domain +'blogs/uploads', formData,  this.options )
-          .map(files => files).subscribe()}
+      }
 
  
 fileChangeEvent(fileInput: any) {
