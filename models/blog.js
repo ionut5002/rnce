@@ -281,7 +281,7 @@ const blogSchema = new Schema({
   LicenceRequired:{type:String, required:true},
   path:{type:Array},
   createdBy: { type: String },
-  createdAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: Date.now },
   likes: { type: Number, default: 0 },
   likedBy: { type: Array },
   dislikes: { type: Number, default: 0 },
@@ -290,7 +290,7 @@ const blogSchema = new Schema({
     comment: { type: String, validate: commentValidators },
     commentator: { type: String },
     attachements:{ type:Array },
-    createdTime: { type: Date, default: Date.now() }
+    createdTime: { type: Date, default: Date.now }
   }]
 });
 
