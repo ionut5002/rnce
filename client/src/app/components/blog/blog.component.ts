@@ -25,17 +25,22 @@ export class BlogComponent implements OnInit {
   username;
   role;
   blogPosts;
+  allusers;
+  emailList=[];
   newComment = [];
   enabledComments = [];
-  listing;  
+  listing;
   filesToUpload=[];
    upl = [];
    options;
    Notifications;
    blogT;
+   blogJ;
    co=0;
    LocationMap;
    location;
+   blogC;
+   creatorEmail;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -225,6 +230,19 @@ export class BlogComponent implements OnInit {
     this.newComment.push(id); // Add the post that is being commented on to the array
     this.blogService.getSingleBlog(id).subscribe(data =>{
       this.blogT = data.blog.title;
+      this.blogC = data.blog.createdBy;
+      this.blogJ = data.blog.JobNo;
+      this.blogService.getSingleUser(this.blogC).subscribe(data=>{
+        if (!data.success) {
+          this.messageClass = 'alert alert-danger'; // Return error class
+          this.message = data.message; // Return error message
+        } else {
+          this.messageClass = 'alert alert-success'; // Return success class
+          this.message = data.message; // Return success message
+        this.creatorEmail=data.user.email;
+        }
+      })
+      
       
    });
   }
@@ -240,6 +258,7 @@ export class BlogComponent implements OnInit {
 
   // Function to submit a new blog post
   onBlogSubmit() {
+    
     this.processing = true; // Disable submit button
     this.disableFormNewBlogForm(); // Lock form
 
@@ -280,6 +299,7 @@ export class BlogComponent implements OnInit {
         this.getNewNotification();
         this.getAllBlogs();
         this.getAllNotifications();
+        this.newEmailNote()
 
         
 
@@ -364,7 +384,7 @@ export class BlogComponent implements OnInit {
 
   // Function to post a new comment
   postComment(id) {
-    
+    this.CommEmailNote()
     const notification = {
       title: this.blogT, // Title field
       createdBy: this.username // CreatedBy field
@@ -445,13 +465,54 @@ reloadAuto(){
       navigator.geolocation.getCurrentPosition(position => {
         this.location = position.coords;
         this.LocationMap = this.location.latitude+', '+this.location.longitude;
-        console.log(this.LocationMap)
+        
          
       });
    }
   }
 
-  
+/*   email notifications */
+
+getAllUsers() {
+  // Function to GET all blogs from database
+  this.blogService.getAllUsers().subscribe(data => {
+    this.allusers = data.users; // Assign array to use in HTML
+    this.getEmailList()
+  });
+}
+
+  getEmailList(){
+    for(let i =0; i < this.allusers.length; i++){
+      if(this.allusers[i].role === "TMP"){
+      this.emailList.push(this.allusers[i].email)}
+      }
+      /* console.log(this.emailList.toString()) */
+  }
+  newEmailNote(){
+    
+    const newEmail = {
+      to: this.emailList.toString(), // Title field
+      html:'<h2>New Job</h2><br /> '+ ' Title: <strong>' +this.form.get('title').value +'</strong><br />' +'Job No: ' +'<strong>' + this.form.get('JobNo').value+'</strong>'+'</strong><br />' +'Client: ' +'<strong>' + this.form.get('Client').value+'</strong>', // CreatedBy field
+    }
+    
+    this.blogService.newEmailNot(newEmail).subscribe(data => {
+      // Check if blog was saved to database or not
+      
+    });
+  }
+
+  CommEmailNote(){
+    
+    const newEmail = {
+      to: this.creatorEmail.toString(), // Title field
+      html:'<h2>New Changes on</h2><br /> '+ ' Title: <strong>' +this.blogT +'</strong><br />' +'Job No: ' +'<strong>' + this.blogJ+'</strong>'+'</strong><br />' +'Added by: ' +'<strong>' + this.username+'</strong>', // CreatedBy field
+    }
+    
+    this.blogService.newEmailNot(newEmail).subscribe(data => {
+      // Check if blog was saved to database or not
+      
+    });
+  }
 
   ngOnInit() {
     // Get profile username on page load
@@ -463,6 +524,8 @@ reloadAuto(){
     this.reloadAuto();
     this.getAllBlogs(); // Get all blogs on component load
     this.getAllNotifications();
+    this.getAllUsers()
+    
 
   }
 

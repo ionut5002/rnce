@@ -3,6 +3,7 @@ const Blog = require('../models/blog'); // Import Blog Model Schema
 const Notification = require('../models/notification');
 const jwt = require('jsonwebtoken'); // Compact, URL-safe means of representing claims to be transferred between two parties.
 const config = require('../config/database'); // Import database configuration
+const nodemailer = require('nodemailer');
 const multer = require('multer');
 var storage = multer.diskStorage({
   // destination
@@ -504,7 +505,7 @@ module.exports = (router) => {
       
     
   });
-
+ 
   router.put("/seen", (req, res)=>{
     
     // Check if id was passed provided in request body
@@ -567,5 +568,91 @@ module.exports = (router) => {
     }).sort({ '_id': -1 }); // Sort blogs from newest to oldest
   });
 
+  /* mail notifications */
+
+  router.post('/send', (req, res) => {
+    // create reusable transporter object using the default SMTP transport
+  
+  // Generate test SMTP service account from ethereal.email
+  // Only needed if you don't have a real mail account for testing
+      // create reusable transporter object using the default SMTP transport
+      let transporter = nodemailer.createTransport({
+         /*  host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              type: 'OAuth2',
+              user: 'ionita.claudiu.ionut@gmail.com',
+              clientId: ' 386206867075-cnhmg78ao2p12er5r94fktp3ticltkrv.apps.googleusercontent.com',
+              clientSecret: 'hFEue0VXUCFA37RDC36iJtgK',
+              refreshToken: '1/CalT4ZTvB-LXHLcBEIf8Hl2EVt5klwX0dRiM95HLcs36PG1h5ZgXq9yjINWGwFDX',
+              accessToken: 'ya29.GlumBdXboO0cI20ymqrnSH2yW8MGvejgvt6sJ5P4AKdbKvYmfspR4aiR-4DgyHmnrEF00jjP17Ll9KkSMlxo5ef43jWsNWsvQkuPdVRneC-KP7C92YDxRp9WOrr8'
+          } */
+          service: 'gmail',
+ auth: {
+        user: 'richardnolanapp@gmail.com',
+        pass: 'ionut5002'
+    }
+      });
+  
+      // setup email data with unicode symbols
+      let mailOptions = {
+          from: '"RNCE Notifications" <NotificationsRNCE@gmail.com>', // sender address
+          to: req.body.to, // list of receivers
+          subject: 'New Notification', // Subject line
+          text: req.body.html, // plain text body
+          html: req.body.html // html body
+      };
+  
+      // send mail with defined transport object
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          res.json({message:'mail sent'})
+          /* console.log('Message sent: %s', info.messageId);
+          // Preview only available when sending through an Ethereal account
+          console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  
+          // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+          // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou... */
+      });
+  });
+  router.get('/allUsers', (req, res) => {
+    // Search database for all blog posts
+    User.find({}, (err, users) => {
+      // Check if error was found or not
+      if (err) {
+        res.json({ success: false, message: err }); // Return error message
+      } else {
+        // Check if blogs were found in database
+        if (!users) {
+          res.json({ success: false, message: 'No users found.' }); // Return error of no blogs found
+        } else {
+          res.json({ success: true, users: users }); // Return success and blogs array
+        }
+      }
+    }).select('email role');
+  });
+
+  router.get('/singleUser/:blogC', (req, res) => {
+    // Search database for all blog posts
+    User.findOne({username: req.params.blogC}, (err, user) => {
+      // Check if error was found or not
+      if (err) {
+        res.json({ success: false, message: err }); // Return error message
+      } else {
+        // Check if blogs were found in database
+        if (!user) {
+          res.json({ success: false, message: 'No user found.' }); // Return error of no blogs found
+        } else {
+          res.json({ success: true, user: user }); // Return success and blogs array
+        }
+      }
+    }).select(' email '); 
+  });
+
+
   return router;
 };
+

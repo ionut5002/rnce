@@ -20,6 +20,8 @@ export class EditBlogComponent implements OnInit {
   loading = true;
   LocationMap;
    locations;
+   allusers;
+   emailList=[]
 
   constructor(
     private location: Location,
@@ -31,6 +33,7 @@ export class EditBlogComponent implements OnInit {
 
   // Function to Submit Update
   updateBlogSubmit() {
+    this.newEmailNote()
     this.processing = true; // Lock form fields
     // Function to send blog object to backend
     this.blogService.editBlog(this.blog).subscribe(data => {
@@ -66,18 +69,43 @@ export class EditBlogComponent implements OnInit {
   goBack() {
     this.location.back();
   }
-  getGeolocation(){
-    if(navigator.geolocation){
-      navigator.geolocation.getCurrentPosition(position => {
-        this.locations = position.coords;
-        this.LocationMap = this.locations.latitude+', '+this.locations.longitude;
-        console.log(this.LocationMap)
-         
-      });
-   }
+ 
+
+
+  /* email notification */
+
+
+
+  getAllUsers() {
+    // Function to GET all blogs from database
+    this.blogService.getAllUsers().subscribe(data => {
+      this.allusers = data.users; // Assign array to use in HTML
+      this.getEmailList()
+    });
   }
+  
+    getEmailList(){
+      for(let i =0; i < this.allusers.length; i++){
+        if(this.allusers[i].role === "TMP"){
+        this.emailList.push(this.allusers[i].email)}
+        }
+        
+    }
+    newEmailNote(){
+      
+      const newEmail = {
+        to: this.emailList.toString(), // Title field
+        html:'<h2>New Edit on Job</h2><br /> '+ ' Title: <strong>' + this.blog.title +'</strong><br />' +'Job No: ' +'<strong>' + this.blog.JobNo+'</strong>'+'</strong><br />' +'By: ' +'<strong>' + this.blog.createdBy+'</strong>', // CreatedBy field
+      }
+      
+      this.blogService.newEmailNot(newEmail).subscribe(data => {
+        // Check if blog was saved to database or not
+        
+      });
+    }
 
   ngOnInit() {
+    this.getAllUsers()
     this.currentUrl = this.activatedRoute.snapshot.params; // When component loads, grab the id
     // Function to GET current blog with id in params
     this.blogService.getSingleBlog(this.currentUrl.id).subscribe(data => {
