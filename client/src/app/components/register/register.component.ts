@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { BlogService } from '../../services/blog.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,10 +19,14 @@ export class RegisterComponent implements OnInit {
   emailMessage;
   usernameValid;
   usernameMessage;
+  role;
+  Notifications;
+  newUserSeen
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private blogService: BlogService,
     private router: Router
   ) {
     this.createForm(); // Create Angular 2 Form when component loads
@@ -125,6 +130,7 @@ export class RegisterComponent implements OnInit {
 
   // Function to submit form
   onRegisterSubmit() {
+    this.getAllNotifications();
     this.processing = true; // Used to notify HTML that form is in processing, so that it can be disabled
     this.disableForm(); // Disable the form
     // Create user object form user's inputs
@@ -185,7 +191,50 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  getAutorization(){
+    this.authService.getProfile().subscribe(data => {
+      // Resposne from registration attempt
+      if (data.user.role !=="Admin") {
+        this.messageClass = 'alert alert-danger'; // Set an error class
+        this.message = 'You are not authorized to see this page';
+        setTimeout(() => {
+          this.router.navigate(['/']); // Redirect to login view
+        }, 4000); // Set an error message
+      } else {
+         // Set a success message
+        // After 2 second timeout, navigate to the login page
+        this.role = data.user.role;
+      }
+    });
+  }
+
+  getAllNotifications() {
+    // Function to GET all blogs from database
+    this.blogService.getAllNotifications().subscribe(data => {
+      this.Notifications = data.notifications;
+      
+      for(let i=0; i < this.Notifications.length; i++) {
+        this.newUserSeen={
+          _id: this.Notifications[i]._id,
+          newUser: this.form.get('username').value
+        }
+        this.blogService.editNotification(this.newUserSeen).subscribe(data =>{
+          if(!data.success){
+
+          }else {
+
+          }
+        })
+
+      }
+
+      
+    
+    });
+  }
+
   ngOnInit() {
+    this.getAutorization();
   }
 
 }

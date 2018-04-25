@@ -103,6 +103,10 @@ export class BlogService {
     const notseen ={ id: id};
     return this.http.put(this.domain + 'blogs/seen', notseen, this.options).map(res=> res.json());
   }
+  editNotification(newUserSeen) {
+    this.createAuthenticationHeaders(); // Create headers
+    return this.http.put(this.domain + 'blogs/updateNotification/', newUserSeen, this.options).map(res => res.json());
+  }
   newEmailNot(newEMail) {
     this.createAuthenticationHeaders(); // Create headers
     return this.http.post(this.domain + 'blogs/send', newEMail, this.options).map(res => res.json());

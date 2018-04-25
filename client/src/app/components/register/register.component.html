@@ -8,7 +8,7 @@
 </div>
 
 <!-- Registration Form -->
-<form [formGroup]="form" (submit)="onRegisterSubmit()">
+<form *ngIf="this.role==='Admin'" [formGroup]="form" (submit)="onRegisterSubmit()">
 
   <!-- Username Input -->
   <div class="form-group">

@@ -4,6 +4,7 @@ const Notification = require('../models/notification');
 const jwt = require('jsonwebtoken'); // Compact, URL-safe means of representing claims to be transferred between two parties.
 const config = require('../config/database'); // Import database configuration
 const nodemailer = require('nodemailer');
+const env = require('../env');
 const multer = require('multer');
 var storage = multer.diskStorage({
   // destination
@@ -590,8 +591,8 @@ module.exports = (router) => {
           } */
           service: 'gmail',
  auth: {
-        user: 'richardnolanapp@gmail.com',
-        pass: 'ionut5002'
+        user: process.env.Gmail,
+        pass: process.env.GPass
     }
       });
   
@@ -651,6 +652,44 @@ module.exports = (router) => {
       }
     }).select(' email '); 
   });
+
+
+  router.put('/updateNotification', (req, res) => {
+    // Check if id was provided
+    if (!req.body._id) {
+      res.json({ success: false, message: 'No blog id provided' }); // Return error message
+    } else {
+      // Check if id exists in database
+      Notification.findOne({ _id: req.body._id }, (err, notification) => {
+        // Check if id is a valid ID
+        if (err) {
+          res.json({ success: false, message: 'Not a valid blog id' }); // Return error message
+        } else {
+          // Check if id was found in the database
+          if (!notification) {
+            res.json({ success: false, message: 'Blog id was not found.' }); // Return error message
+          } else {
+                    
+            notification.seen.push(req.body.newUser);
+            notification.save((err) => {
+              if (err) {
+                if (err.errors) {
+                  res.json({ success: false, message: 'Please ensure form is filled out properly' });
+                } else {
+                  res.json({ success: false, message: err }); // Return error message
+                }
+              } else {
+                res.json({ success: true, message: 'Notification Updated!' }); // Return success message
+              }
+            });
+          }
+            // Check who user is that is requesting blog update
+           
+          
+        }
+      })
+    }
+  })
 
 
   return router;
