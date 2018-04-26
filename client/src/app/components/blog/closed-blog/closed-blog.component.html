@@ -1,5 +1,6 @@
 
-<h1 class="page-header">Close Job</h1>
+<h1 *ngIf="foundBlog" class="page-header">Close Job</h1>
+<h1 *ngIf="!foundBlog" class="page-header">Closed Jobs</h1>
 
 <!-- Custom Success/Error Message -->
 <div class="row show-hide-message" *ngIf="message">
@@ -21,7 +22,10 @@
     </div>
 
     <!-- Modal Body -->
-    <div class="modal-body">
+    <div *ngIf="blog.close" class="modal-body">
+      <p>Are you sure you would like to open this Job?</p>
+    </div>
+    <div *ngIf="!blog.close" class="modal-body">
       <p>Are you sure you would like to close this Job?</p>
     </div>
 

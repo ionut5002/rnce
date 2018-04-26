@@ -317,7 +317,7 @@ module.exports = (router) => {
                       if (err) {
                         res.json({ success: false, message: err }); // Return error message
                       } else {
-                        res.json({ success: true, message: 'Job Closed!' }); // Return success message
+                        res.json({ success: true, message: 'Job Reopened!' }); // Return success message
                       }
                     });
 
