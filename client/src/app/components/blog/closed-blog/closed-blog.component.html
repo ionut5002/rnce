@@ -1,5 +1,5 @@
 
-<h1 *ngIf="foundBlog" class="page-header">Close Job</h1>
+<h1 *ngIf="foundBlog" class="page-header">Close/Open Job</h1>
 <h1 *ngIf="!foundBlog" class="page-header">Closed Jobs</h1>
 
 <!-- Custom Success/Error Message -->
@@ -65,6 +65,7 @@
 
 
 <button *ngIf="!foundBlog" [disabled]="processing" type="button" name="button" class="btn btn-success" (click)="goBack()">Go Back</button>
+<br />
 <div *ngIf="!foundBlog">
   <!-- Panel Outer Layer -->
   <div  *ngFor="let blog of blogPosts">
