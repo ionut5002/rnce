@@ -258,7 +258,7 @@ export class BlogComponent implements OnInit {
 
   // Function to submit a new blog post
   onBlogSubmit() {
-    
+    this.upload();
     this.processing = true; // Disable submit button
     this.disableFormNewBlogForm(); // Lock form
 

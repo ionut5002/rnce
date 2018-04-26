@@ -121,7 +121,7 @@
 </div></div>
 <div class="row">
 <div class="form-group col-md-6">
-  <label for="RoadWidth">Road Width</label>
+  <label for="RoadWidth">Road Width(in meters)</label>
   <div [ngClass]="{'has-success': form.controls.RoadWidth.valid, 'has-error': form.controls.RoadWidth.dirty && form.controls.RoadWidth.errors}">
 <!-- Road Width Input -->
 <input type="text" name="RoadWidth" class="form-control" placeholder="*RoadWidth" autocomplete="off" formControlName="RoadWidth" />
@@ -155,7 +155,7 @@
 </div>
 
 <div class="form-group col-md-6">
-  <label for="Volume">Volume</label>
+  <label for="Volume">Volume(3 min count)</label>
   <div [ngClass]="{'has-success': form.controls.Volume.valid, 'has-error': form.controls.Volume.dirty && form.controls.Volume.errors}">
 <!-- Volume Input -->
 <input type="text" name="Volume" class="form-control" placeholder="*Volume" autocomplete="off" formControlName="Volume" />
@@ -225,19 +225,27 @@
     </div>
   </div>
   <div class="form-group">
-    <h4>Please attach photos</h4>
+    <div class="col-md-7" style = "border: 1px solid red ;"><h5>See some examples of photos that you may upload</h5>
+      <img src="https://firebasestorage.googleapis.com/v0/b/upload-rnce.appspot.com/o/example3.JPG?alt=media" alt="" width="200" height="100">
+      <img src="https://firebasestorage.googleapis.com/v0/b/upload-rnce.appspot.com/o/example2.JPG?alt=media" alt="" width="200" height="100">
+      <img src="https://firebasestorage.googleapis.com/v0/b/upload-rnce.appspot.com/o/example1.JPG?alt=media" alt="" width="200" height="100">
+      <br />
+      <br />
+    </div>
+    <div class="col-md-12"><h4>Please attach photos(Location map, Working area)</h4>
   <input type="file" name="photo" placeholder="upload files" (change)="fileChangeEvent($event)" accept="image/jpg, image/jpeg, image/png, application/pdf"  multiple  />
   <div *ngFor="let names of this.upl">
     <p>{{names}}</p>
-  </div>
-
+  </div></div>
+  
 </div>
 
   <!-- Go Back Button -->
-  <button [disabled]="processing" type="button" name="button" (click)="goBack()" class="btn btn-warning">Go Back</button>
+  <div class="col-md-12"><br />
+    <br /><button [disabled]="processing" type="button" name="button" (click)="goBack()" class="btn btn-warning">Go Back</button>
   <!-- Submit Button -->
-  <button [disabled]="processing  || !form.valid" type="submit" name="button" class="btn btn-success" (click)="upload()">Submit</button>
-
+  <button [disabled]="processing  || !form.valid" type="submit" name="button" class="btn btn-success" >Submit</button> <!-- (click)="upload()" -->
+  </div>
 </form>
 <!-- New Blog Form -->
 
@@ -264,7 +272,7 @@
         <li><strong>RoadWidth:</strong> {{blog.RoadWidth}} m</li>
         <li><strong>CarriagewayType:</strong> {{blog.CarriagewayType}}</li>
         <li><strong>RoadLevel:</strong> {{blog.RoadLevel}}</li>
-        <li><strong>Volume:</strong> {{blog.Volume}} cars/hour</li>
+        <li><strong>Volume:</strong> {{blog.Volume}} (3 min count)</li>
         <li><strong>WorksType:</strong> {{blog.WorksType}}</li>
         <li><strong>WorksHours:</strong> {{blog.WorksHours}}</li>
         <li><strong>LocationOnRoad:</strong> {{blog.LocationOnRoad}}</li>
@@ -296,7 +304,7 @@
       <!-- Delete Button -->
       <a [routerLink]="['/delete-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-danger">Delete</button></a>
       <!-- Close Button -->
-      <a [routerLink]="['/closed-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-danger">Close</button></a>
+      <a [routerLink]="['/closed-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-success">Close</button></a>
 
       <!-- Likes Dropdown  -->
       <!-- <div class="dropdown"> -->

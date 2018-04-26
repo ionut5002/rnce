@@ -89,7 +89,7 @@
         <li><strong>RoadWidth:</strong> {{blog.RoadWidth}} m</li>
         <li><strong>CarriagewayType:</strong> {{blog.CarriagewayType}}</li>
         <li><strong>RoadLevel:</strong> {{blog.RoadLevel}}</li>
-        <li><strong>Volume:</strong> {{blog.Volume}} cars/hour</li>
+        <li><strong>Volume:</strong> {{blog.Volume}} (3 min count)</li>
         <li><strong>WorksType:</strong> {{blog.WorksType}}</li>
         <li><strong>WorksHours:</strong> {{blog.WorksHours}}</li>
         <li><strong>LocationOnRoad:</strong> {{blog.LocationOnRoad}}</li>
@@ -122,7 +122,7 @@
       <a [routerLink]="['/delete-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-danger">Delete</button></a>
       <!-- Close Button -->
       <a [routerLink]="['/closed-blog/', blog._id]" *ngIf="username === blog.createdBy && !blog.close"><button type="button" name="button" class="btn btn-sm btn-danger">Close</button></a>
-      <a [routerLink]="['/closed-blog/', blog._id]" *ngIf="username === blog.createdBy &&  blog.close"><button type="button" name="button" class="btn btn-sm btn-danger">Reopen</button></a>
+      <a [routerLink]="['/closed-blog/', blog._id]" *ngIf="username === blog.createdBy &&  blog.close"><button type="button" name="button" class="btn btn-sm btn-success">Reopen</button></a>
 
       <!-- Likes Dropdown  -->
       <!-- <div class="dropdown"> -->
