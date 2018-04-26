@@ -66,6 +66,7 @@
 
 <button *ngIf="!foundBlog" [disabled]="processing" type="button" name="button" class="btn btn-success" (click)="goBack()">Go Back</button>
 <br />
+<br />
 <div *ngIf="!foundBlog">
   <!-- Panel Outer Layer -->
   <div  *ngFor="let blog of blogPosts">
@@ -151,8 +152,6 @@
       <li class="list-group-item">
         <!-- Post Comment Button -->
         <!-- <button type="button" name="button" class="btn btn-sm btn-danger" (click)="draftComment(blog._id)" [disabled]="newComment.indexOf(blog._id) > -1">Post Comment</button> -->
-        <br />
-        <br />
         
 
         <!-- Show Comments -->
