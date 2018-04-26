@@ -279,6 +279,7 @@ const blogSchema = new Schema({
   Address:{type:String,required:true, validate:AddressValidators},
   LocationMap:{type:String},
   LicenceRequired:{type:String, required:true},
+  close: {type:Boolean, default:false},
   path:{type:Array},
   createdBy: { type: String },
   createdAt: { type: Date, default: Date.now },

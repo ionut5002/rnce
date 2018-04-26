@@ -1,0 +1,188 @@
+
+<h1 class="page-header">Close Job</h1>
+
+<!-- Custom Success/Error Message -->
+<div class="row show-hide-message" *ngIf="message">
+  <div [ngClass]="messageClass">
+    {{ message }}
+  </div>
+</div>
+
+<!-- Modal Confirmation Window -->
+<div class="col-md-6" *ngIf="foundBlog">
+  <!-- Model Outer Layer -->
+  <div class="modal-content">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <!-- Close Button -->
+      <button type="button" name="button" class="close" data-dismiss="modal">&times;</button>
+      <!-- Modal Title -->
+      <h4 class="modal-title">Confirm</h4>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <p>Are you sure you would like to close this Job?</p>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <!-- Yes Button -->
+      <button [disabled]="processing" type="button" name="button" class="btn btn-success" (click)="closedBlog()">Yes</button>
+      <!-- No Button -->
+      <a routerLink="/blog"><button [disabled]="processing" type="button" name="button" class="btn btn-danger">No</button></a>
+    </div>
+  </div>
+
+  <br />
+
+  <!-- Panel -->
+  <div class="panel panel-primary">
+    <!-- Panel Heading -->
+    <div class="panel-heading">
+      <!-- Panel Title -->
+      <h3 class="panel-title">{{ blog.title }}</h3>
+    </div>
+
+    <!-- Panel Body -->
+    <div class="panel-body">
+      {{ blog.body }}
+    </div>
+
+    <!-- Panel Footer -->
+    <div class="panel-footer">
+      <strong>Posted by: </strong> {{ blog.createdBy }}
+      <br />
+      <strong>Date: </strong> {{ blog.createdAt | date:'MMM dd, yyyy' }}
+    </div>
+  </div>
+
+</div>
+
+
+<button *ngIf="!foundBlog" [disabled]="processing" type="button" name="button" class="btn btn-success" (click)="goBack()">Go Back</button>
+<div *ngIf="!foundBlog">
+  <!-- Panel Outer Layer -->
+  <div  *ngFor="let blog of blogPosts">
+<div class="panel panel-primary" *ngIf="blog.close && (role === 'TMP' || blog.createdBy === username) ">
+    <!-- Panel Title -->
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ blog.title }} {{ blog.JobNo }}</h3>
+    </div>
+
+    <!-- Panel Body -->
+    
+    <div class="panel-body">
+      <div class="col-md-6">
+      <ul class="list-unstyled">
+        <li><strong>Client: </strong> {{blog.Client}}</li>
+        <li><strong>Address: </strong> {{blog.Address}}</li>
+        <li><strong>Licence Required: </strong> {{blog.LicenceRequired}}</li>
+        <li><strong>StartDate:</strong> {{blog.StartDate}}</li>
+        <li><strong>SpeedOfRoad:</strong> {{blog.SpeedOfRoad}}</li>
+        <li><strong>RoadWidth:</strong> {{blog.RoadWidth}} m</li>
+        <li><strong>CarriagewayType:</strong> {{blog.CarriagewayType}}</li>
+        <li><strong>RoadLevel:</strong> {{blog.RoadLevel}}</li>
+        <li><strong>Volume:</strong> {{blog.Volume}} cars/hour</li>
+        <li><strong>WorksType:</strong> {{blog.WorksType}}</li>
+        <li><strong>WorksHours:</strong> {{blog.WorksHours}}</li>
+        <li><strong>LocationOnRoad:</strong> {{blog.LocationOnRoad}}</li>
+        <li><strong>Type Of Traffic Control Required:</strong> {{blog.TypeOfTrafficCR}}</li>
+        <li><strong>Description:</strong> {{ blog.body }} </li>
+        <li><a *ngIf="blog.LocationMap" class="btn btn-sm btn-info" href="https://www.google.ie/maps/search/{{ blog.LocationMap }}" target="_blank">See on Map by Coordonates</a>
+            <a class="btn btn-sm btn-success" href="https://www.google.ie/maps/search/{{ blog.Address }}" target="_blank">See on Map by Address</a></li>
+      </ul>
+    </div>
+    <div class="col-md-6" *ngFor="let ph of blog.path">
+      <a  href="https://firebasestorage.googleapis.com/v0/b/upload-rnce.appspot.com/o/{{ph}}?alt=media" target="_blank"><img src="https://firebasestorage.googleapis.com/v0/b/upload-rnce.appspot.com/o/{{ph}}?alt=media" alt="" width="200" height="100"></a>
+      {{ph}}&nbsp;&nbsp;<a  class="btn btn-sm btn-success" href="https://firebasestorage.googleapis.com/v0/b/upload-rnce.appspot.com/o/{{ph}}?alt=media"  role="button" target="_blank" >Download</a><br/><br/>
+    </div></div>
+
+    <!-- Panel Footer Start -->
+    <div class="panel-footer">
+      <strong>Posted by: </strong>{{ blog.createdBy }}
+      <br />
+      <strong>Date: </strong>{{ blog.createdAt | date:'dd MMM yyyy hh:mm a' }}
+      <br />
+     <!--  <div *ngIf="username === blog.createdBy">
+        <strong>Likes: </strong>{{ blog.likes }}
+        <br />
+        <strong>Dislikes: </strong>{{ blog.dislikes }}
+      </div> -->
+
+      <!-- Edit Button -->
+      <a [routerLink]="['/edit-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-info">Edit</button></a>
+      <!-- Delete Button -->
+      <a [routerLink]="['/delete-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-danger">Delete</button></a>
+      <!-- Close Button -->
+      <a [routerLink]="['/closed-blog/', blog._id]" *ngIf="username === blog.createdBy && !blog.close"><button type="button" name="button" class="btn btn-sm btn-danger">Close</button></a>
+      <a [routerLink]="['/closed-blog/', blog._id]" *ngIf="username === blog.createdBy &&  blog.close"><button type="button" name="button" class="btn btn-sm btn-danger">Reopen</button></a>
+
+      <!-- Likes Dropdown  -->
+      <!-- <div class="dropdown"> -->
+        <!-- Like Button -->
+        <!-- <button [disabled]="blog.likedBy.indexOf(username) > -1" type="button" name="button" class="btn btn-sm btn-success" *ngIf="username !== blog.createdBy" (click)="likeBlog(blog._id)"><span class="glyphicon glyphicon-thumbs-up">&nbsp;</span>Likes: {{ blog.likes }}</button>
+        --> <!-- Dropdown Menu Items -->
+       <!--  <div class="dropdown-content">
+          <a [routerLink]="['/user/', liker]" *ngFor="let liker of blog.likedBy">{{ liker }}</a>
+        </div>
+      </div> -->
+
+      <!-- Dislikes Dropdown  -->
+      <!-- <div class="dropdown"> -->
+        <!-- Dislike Button -->
+<!--         <button [disabled]="blog.dislikedBy.indexOf(username) > -1" type="button" name="button" class="btn btn-sm btn-warning" *ngIf="username !== blog.createdBy" (click)="dislikeBlog(blog._id)"><span class="glyphicon glyphicon-thumbs-down">&nbsp;</span>Dislikes: {{ blog.dislikes }}</button>
+         --><!-- Dropdown Menu Items -->
+        <!-- <div class="dropdown-content">
+          <a [routerLink]="['/user/', disliker]" *ngFor="let disliker of blog.dislikedBy">{{ disliker }}</a>
+        </div>
+      </div> -->
+
+    </div>
+    <!-- Panel Footer End -->
+
+    <!-- Post Comment Box: Start -->
+    <ul class="list-group">
+      <li class="list-group-item">
+        <!-- Post Comment Button -->
+        <!-- <button type="button" name="button" class="btn btn-sm btn-danger" (click)="draftComment(blog._id)" [disabled]="newComment.indexOf(blog._id) > -1">Post Comment</button> -->
+        <br />
+        <br />
+        
+
+        <!-- Show Comments -->
+        <li *ngIf="enabledComments.indexOf(blog._id) === -1 && blog.comments.length > 0" class="list-group-item">
+          <button  class="btn btn-sm btn-info" (click)="expand(blog._id)">
+            Show comments&nbsp;&nbsp;
+            <div class="glyphicon glyphicon-comment"></div>
+          </button>
+        </li>
+
+        <!-- Hide Comments -->
+        <li *ngIf="enabledComments.indexOf(blog._id) > -1" class="list-group-item">
+          <button class="btn btn-sm btn-info" (click)="collapse(blog._id)">
+            Hide Comments&nbsp;&nbsp;
+            <div class="glyphicon glyphicon-comment"></div>
+          </button>
+        </li>
+
+        <!-- Comment -->
+        <div *ngIf="enabledComments.indexOf(blog._id) > -1">
+          <li *ngFor="let comment of blog.comments" class="list-group-item">
+            <strong>{{ comment.commentator }}:</strong>
+            <br /> {{ comment.comment }} 
+            <ul><li *ngFor="let attachement of comment.attachements">{{attachement}}&nbsp;&nbsp;<a class="btn btn-sm btn-success" href="https://firebasestorage.googleapis.com/v0/b/upload-rnce.appspot.com/o/{{attachement}}?alt=media"  role="button" target="_blank">Download</a></li></ul>
+            <strong>Created at:{{comment.createdTime | date:'dd MMM yyyy hh:mm a'}}</strong>
+          </li>
+          
+        </div>
+      </ul>
+    <!-- Post Comment Box: End -->
+    </div>
+  </div>
+  <br />
+  <br />
+  
+  <!-- Panel Outer Layer -->
+</div>
+<!-- Panel End --> 

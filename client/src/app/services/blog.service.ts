@@ -55,6 +55,13 @@ export class BlogService {
     this.createAuthenticationHeaders(); // Create headers
     return this.http.get(this.domain + 'blogs/singleUser/' + blogC, this.options).map(res => res.json());
   }
+   // Function to close a blog
+   closeBlog(id) {
+     console.log(id)
+     const closedata= {id:id}
+     // Create headers
+    return this.http.put(this.domain + 'blogs/closeBlog/', closedata, this.options).map(res => res.json());
+  }
 
   // Function to edit/update blog post
   editBlog(blog) {
@@ -64,9 +71,11 @@ export class BlogService {
 
   // Function to delete a blog
   deleteBlog(id) {
+    
     this.createAuthenticationHeaders(); // Create headers
     return this.http.delete(this.domain + 'blogs/deleteBlog/' + id, this.options).map(res => res.json());
   }
+ 
 
   // Function to like a blog post
   likeBlog(id) {

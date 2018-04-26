@@ -99,7 +99,7 @@ module.exports = (router) => {
       } else {
         // Check if blogs were found in database
         if (!blogs) {
-          res.json({ success: false, message: 'No blogs found.' }); // Return error of no blogs found
+          res.json({ success: false, message: 'No Jobs found.' }); // Return error of no blogs found
         } else {
           res.json({ success: true, blogs: blogs }); // Return success and blogs array
         }
@@ -113,17 +113,17 @@ module.exports = (router) => {
   router.get('/singleBlog/:id', (req, res) => {
     // Check if id is present in parameters
     if (!req.params.id) {
-      res.json({ success: false, message: 'No blog ID was provided.' }); // Return error message
+      res.json({ success: false, message: 'No Job ID was provided.' }); // Return error message
     } else {
       // Check if the blog id is found in database
       Blog.findOne({ _id: req.params.id }, (err, blog) => {
         // Check if the id is a valid ID
         if (err) {
-          res.json({ success: false, message: 'Not a valid blog id' }); // Return error message
+          res.json({ success: false, message: 'Not a valid Job id' }); // Return error message
         } else {
           // Check if blog was found by id
           if (!blog) {
-            res.json({ success: false, message: 'Blog not found.' }); // Return error message
+            res.json({ success: false, message: 'Job not found.' }); // Return error message
           } else {
             // Find the current user that is logged in
             User.findOne({ _id: req.decoded.userId }, (err, user) => {
@@ -157,7 +157,7 @@ module.exports = (router) => {
   router.put('/updateBlog', (req, res) => {
     // Check if id was provided
     if (!req.body._id) {
-      res.json({ success: false, message: 'No blog id provided' }); // Return error message
+      res.json({ success: false, message: 'No Job id provided' }); // Return error message
     } else {
       // Check if id exists in database
       Blog.findOne({ _id: req.body._id }, (err, blog) => {
@@ -167,7 +167,7 @@ module.exports = (router) => {
         } else {
           // Check if id was found in the database
           if (!blog) {
-            res.json({ success: false, message: 'Blog id was not found.' }); // Return error message
+            res.json({ success: false, message: 'Job id was not found.' }); // Return error message
           } else {
             // Check who user is that is requesting blog update
             User.findOne({ _id: req.decoded.userId }, (err, user) => {
@@ -208,7 +208,7 @@ module.exports = (router) => {
                           res.json({ success: false, message: err }); // Return error message
                         }
                       } else {
-                        res.json({ success: true, message: 'Blog Updated!' }); // Return success message
+                        res.json({ success: true, message: 'Job Updated!' }); // Return success message
                       }
                     });
                   }
@@ -237,7 +237,7 @@ module.exports = (router) => {
         } else {
           // Check if blog was found in database
           if (!blog) {
-            res.json({ success: false, messasge: 'Blog was not found' }); // Return error message
+            res.json({ success: false, messasge: 'Job was not found' }); // Return error message
           } else {
             // Get info on user who is attempting to delete post
             User.findOne({ _id: req.decoded.userId }, (err, user) => {
@@ -258,9 +258,70 @@ module.exports = (router) => {
                       if (err) {
                         res.json({ success: false, message: err }); // Return error message
                       } else {
-                        res.json({ success: true, message: 'Blog deleted!' }); // Return success message
+                        res.json({ success: true, message: 'Job deleted!' }); // Return success message
                       }
                     });
+                  }
+                }
+              }
+            });
+          }
+        }
+      });
+    }
+  });
+ /* ===============================================================
+     close BLOG POST
+  =============================================================== */
+  router.put('/closeBlog/', (req, res) => {
+    // Check if ID was provided in parameters
+    if (!req.body.id) {
+      res.json({ success: false, message: 'No id provided' }); // Return error message
+    } else {
+      // Check if id is found in database
+      Blog.findOne({ _id: req.body.id }, (err, blog) => {
+        // Check if error was found
+        if (err) {
+          res.json({ success: false, message: 'Invalid id' }); // Return error message
+        } else {
+          // Check if blog was found in database
+          if (!blog) {
+            res.json({ success: false, messasge: 'Job was not found' }); // Return error message
+          } else {
+            // Get info on user who is attempting to delete post
+            User.findOne({ _id: req.decoded.userId }, (err, user) => {
+              // Check if error was found
+              if (err) {
+                res.json({ success: false, message: err }); // Return error message
+              } else {
+                // Check if user's id was found in database
+                if (!user) {
+                  res.json({ success: false, message: 'Unable to authenticate user.' }); // Return error message
+                } else {
+                  // Check if user attempting to delete blog is the same user who originally posted the blog
+                  if (user.username !== blog.createdBy) {
+                    res.json({ success: false, message: 'You are not authorized to delete this blog post' }); // Return error message
+                  } else {
+                    if(!blog.close){
+                    blog.close=true;
+                    blog.save((err) => {
+                      if (err) {
+                        res.json({ success: false, message: err }); // Return error message
+                      } else {
+                        res.json({ success: true, message: 'Job Closed!' }); // Return success message
+                      }
+                    });
+                    }else{
+                      blog.close=false;
+                    blog.save((err) => {
+                      if (err) {
+                        res.json({ success: false, message: err }); // Return error message
+                      } else {
+                        res.json({ success: true, message: 'Job Closed!' }); // Return success message
+                      }
+                    });
+
+                    }
                   }
                 }
               }
@@ -438,11 +499,11 @@ module.exports = (router) => {
         Blog.findOne({ _id: req.body.id }, (err, blog) => {
           // Check if error was found
           if (err) {
-            res.json({ success: false, message: 'Invalid blog id' }); // Return error message
+            res.json({ success: false, message: 'Invalid Job id' }); // Return error message
           } else {
             // Check if id matched the id of any blog post in the database
             if (!blog) {
-              res.json({ success: false, message: 'Blog not found.' }); // Return error message
+              res.json({ success: false, message: 'Job not found.' }); // Return error message
             } else {
               // Grab data of user that is logged in
               User.findOne({ _id: req.decoded.userId }, (err, user) => {
@@ -517,11 +578,11 @@ module.exports = (router) => {
       Notification.findOne({ _id: req.body.id }, (err, notification) => {
         // Check if error was encountered
         if (err) {
-          res.json({ success: false, message: 'Invalid blog id' }); // Return error message
+          res.json({ success: false, message: 'Invalid notification id' }); // Return error message
         } else {
           // Check if id matched the id of a blog post in the database
           if (!notification) {
-            res.json({ success: false, message: 'That blog was not found.' }); // Return error message
+            res.json({ success: false, message: 'That notifications was not found.' }); // Return error message
           } else {
             // Get data from user that is signed in
             User.findOne({ _id: req.decoded.userId }, (err, user) => {
@@ -561,7 +622,7 @@ module.exports = (router) => {
       } else {
         // Check if blogs were found in database
         if (!notificatons) {
-          res.json({ success: false, message: 'No blogs found.' }); // Return error of no blogs found
+          res.json({ success: false, message: 'No notifications found.' }); // Return error of no blogs found
         } else {
           res.json({ success: true, notifications: notificatons }); // Return success and blogs array
         }
@@ -689,7 +750,9 @@ module.exports = (router) => {
         }
       })
     }
-  })
+  });
+
+  
 
 
   return router;

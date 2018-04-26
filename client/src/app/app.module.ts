@@ -18,9 +18,11 @@ import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
 import { BlogComponent } from './components/blog/blog.component';
 import { EditBlogComponent } from './components/blog/edit-blog/edit-blog.component';
+import { ClosedBlogComponent } from './components/blog/closed-blog/closed-blog.component';
 import { DeleteBlogComponent } from './components/blog/delete-blog/delete-blog.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 import { FileUploadModule } from 'ng2-file-upload';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +36,7 @@ import { FileUploadModule } from 'ng2-file-upload';
     EditBlogComponent,
     DeleteBlogComponent,
     PublicProfileComponent,
+    ClosedBlogComponent,
     
   ],
   imports: [

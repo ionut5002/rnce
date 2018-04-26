@@ -11,6 +11,8 @@ import { EditBlogComponent } from './components/blog/edit-blog/edit-blog.compone
 import { DeleteBlogComponent } from './components/blog/delete-blog/delete-blog.component';
 import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
+import { ClosedBlogComponent } from './components/blog/closed-blog/closed-blog.component';
+
 
 // Our Array of Angular 2 Routes
 const appRoutes: Routes = [
@@ -41,6 +43,16 @@ const appRoutes: Routes = [
   {
     path: 'blog',
     component: BlogComponent, // Blog Route,
+    canActivate: [AuthGuard] // User must be logged in to view this route
+  },
+  {
+    path: 'closed-blog/:id',
+    component: ClosedBlogComponent, // Blog Route,
+    canActivate: [AuthGuard] // User must be logged in to view this route
+  },
+  {
+    path: 'closed-blog',
+    component: ClosedBlogComponent, // Blog Route,
     canActivate: [AuthGuard] // User must be logged in to view this route
   },
   {

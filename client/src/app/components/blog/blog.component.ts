@@ -439,7 +439,8 @@ export class BlogComponent implements OnInit {
       const files: Array<File> = this.filesToUpload;
   
       for(let i =0; i < files.length; i++){
-          formData.append("uploads[]", files[i], files[i]['name']);
+        if(files[i].type=='application/pdf' || files[i].type=='image/jpeg' || files[i].type=='image/jpg' || files[i].type=='image/png'){
+          formData.append("uploads[]", files[i], files[i]['name']);}
           this.createAuthenticationHeaders();
          this.http.post("https://us-central1-upload-rnce.cloudfunctions.net/uploadFile", formData,  this.options )
           .map(files => files).subscribe()
@@ -451,7 +452,9 @@ fileChangeEvent(fileInput: any) {
   this.filesToUpload = <Array<File>>fileInput.target.files;
 this.upl=[];
   for(let i =0; i < this.filesToUpload.length; i++){
+    if(this.filesToUpload[i].type=='application/pdf' || this.filesToUpload[i].type=='image/jpeg' || this.filesToUpload[i].type=='image/jpg' || this.filesToUpload[i].type=='image/png'){
 this.upl.push(this.filesToUpload[i]['name'])
+}
   }
 }
 reloadAuto(){
