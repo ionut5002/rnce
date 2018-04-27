@@ -41,6 +41,7 @@ export class BlogComponent implements OnInit {
    location;
    blogC;
    creatorEmail;
+   email;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -211,6 +212,7 @@ export class BlogComponent implements OnInit {
   // Function to display new blog form
   newBlogForm() {
     this.newPost = true; // Show new blog form
+    this.getEmailList()
   }
 
   // Reload blogs on current page
@@ -240,6 +242,7 @@ export class BlogComponent implements OnInit {
           this.messageClass = 'alert alert-success'; // Return success class
           this.message = data.message; // Return success message
         this.creatorEmail=data.user.email;
+        this.getEmailListComm()
         }
       })
       
@@ -247,8 +250,12 @@ export class BlogComponent implements OnInit {
    });
   }
 
+ 
+
   // Function to cancel new post transaction
   cancelSubmission(id) {
+    this.filesToUpload=[]
+    this.upl=[]
     const index = this.newComment.indexOf(id); // Check the index of the blog post in the array
     this.newComment.splice(index, 1); // Remove the id from the array to cancel post submission
     this.commentForm.reset(); // Reset  the form after cancellation
@@ -297,20 +304,20 @@ export class BlogComponent implements OnInit {
         this.messageClass = 'alert alert-success'; // Return success class
         this.message = data.message; // Return success message
         this.getNewNotification();
-        this.getAllBlogs();
-        this.getAllNotifications();
         this.newEmailNote()
 
         
 
         // Clear form data after two seconds
         setTimeout(() => {
+          this.getAllBlogs();
+        this.getAllNotifications();
           this.newPost = false; // Hide form
           this.processing = false; // Enable submit button
           this.message = false; // Erase error/success message
           this.form.reset(); // Reset all form fields
           this.enableFormNewBlogForm(); // Enable the form fields
-        }, 2000);
+        }, 4000);
       }
     });
   }
@@ -444,7 +451,7 @@ export class BlogComponent implements OnInit {
           this.createAuthenticationHeaders();
          this.http.post("https://us-central1-upload-rnce.cloudfunctions.net/uploadFile", formData,  this.options )
           .map(files => files).subscribe()
-      }
+      } 
       }
 
  
@@ -480,17 +487,31 @@ getAllUsers() {
   // Function to GET all blogs from database
   this.blogService.getAllUsers().subscribe(data => {
     this.allusers = data.users; // Assign array to use in HTML
-    this.getEmailList()
+    
   });
 }
 
   getEmailList(){
+    
+    this.emailList=[]
     for(let i =0; i < this.allusers.length; i++){
-      if(this.allusers[i].role === "TMP"){
+      if(this.allusers[i].role === "TMP" && this.allusers[i].email !== this.email){
       this.emailList.push(this.allusers[i].email)}
       }
       /* console.log(this.emailList.toString()) */
   }
+
+  getEmailListComm(){
+    
+    this.emailList=[]
+    for(let i =0; i < this.allusers.length; i++){
+      if((this.allusers[i].role === "TMP" && this.allusers[i].email !== this.email) || (this.allusers[i].email === this.creatorEmail && this.allusers[i].email !== this.email)){
+      this.emailList.push(this.allusers[i].email)}
+      }
+      /* console.log(this.emailList.toString()) */
+  }
+
+  
   newEmailNote(){
     
     const newEmail = {
@@ -507,7 +528,7 @@ getAllUsers() {
   CommEmailNote(){
     
     const newEmail = {
-      to: this.creatorEmail.toString(), // Title field
+      to: this.emailList.toString(),// Title field
       html:'<h2>New Changes on</h2><br /> '+ ' Title: <strong>' +this.blogT +'</strong><br />' +'Job No: ' +'<strong>' + this.blogJ+'</strong>'+'</strong><br />' +'Added by: ' +'<strong>' + this.username+'</strong>', // CreatedBy field
     }
     
@@ -521,13 +542,16 @@ getAllUsers() {
     // Get profile username on page load
     this.authService.getProfile().subscribe(profile => {
       this.username = profile.user.username;
-      this.role= profile.user.role; // Used when creating new blog posts and comments
+      this.role= profile.user.role;
+      this.email= profile.user.email // Used when creating new blog posts and comments
       
     });
     this.reloadAuto();
     this.getAllBlogs(); // Get all blogs on component load
     this.getAllNotifications();
     this.getAllUsers()
+    
+    
     
 
   }
